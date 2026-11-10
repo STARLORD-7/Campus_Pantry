@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Pantry - My Requests</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- Header and navigation -->
+<header>
+
+  <a class="logo" href="index.html" aria-label="Campus Pantry home">
+
+            <span class="logo-mark" aria-hidden="true">
+                <span class="logo-leaf">✦</span>
+                <span class="logo-bowl"></span>
+            </span>
+
+    <span class="logo-name">
+                Campus Pantry
+                <small>PAY IT FORWARD</small>
+            </span>
+
+  </a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="browse.html">Browse items</a>
+    <a href="give.html">Give an item</a>
+    <a href="requests.html" class="active">My Requests</a>
+  </nav>
+
+  <!-- Student profile dropdown -->
+  <div class="profile-wrap">
+
+    <button
+            class="profile-dot"
+            id="profile-toggle"
+            type="button"
+            aria-label="Open student account"
+            aria-expanded="false"
+    >
+      <span class="avatar-letter">P</span>
+      <i class="online-dot"></i>
+    </button>
+
+    <div class="profile-menu" id="profile-menu" hidden>
+
+      <div class="profile-heading">
+        <span class="profile-avatar">P</span>
+
+        <div>
+          <strong>Pratik S.</strong>
+          <small>Student account</small>
+        </div>
+      </div>
+
+      <div class="login-status">
+        <span></span>
+        Logged in
+      </div>
+
+      <a href="requests.html">My Requests</a>
+      <a href="give.html">Share an item</a>
+
+      <button type="button" id="sign-out">Sign out</button>
+
+    </div>
+  </div>
+
+</header>
+
+<main class="page">
+
+  <!-- Page introduction -->
+  <p class="eyebrow">Your activity</p>
+
+  <h1 class="pagetitle">My requests</h1>
+
+  <p class="sub">
+    Items you have requested will appear here.
+  </p>
+
+  <!-- Requested items will appear here -->
+  <div id="requests-list" class="items"></div>
+
+  <!-- Message displayed when there are no requests -->
+  <p id="no-requests" class="empty-message">
+    You haven't requested any items yet.
+    Visit Browse Items to find something useful.
+  </p>
+
+</main>
+
+<!-- JavaScript functionality -->
+<script src="script.js"></script>
+
+</body>
+</html>

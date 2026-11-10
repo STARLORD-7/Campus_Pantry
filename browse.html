@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Pantry - Browse</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- Header with logo and navigation -->
+<header>
+
+  <a class="logo" href="index.html" aria-label="Campus Pantry home">
+
+            <span class="logo-mark" aria-hidden="true">
+                <span class="logo-leaf">✦</span>
+                <span class="logo-bowl"></span>
+            </span>
+
+    <span class="logo-name">
+                Campus Pantry
+                <small>PAY IT FORWARD</small>
+            </span>
+
+  </a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="browse.html" class="active">Browse items</a>
+    <a href="give.html">Give an item</a>
+    <a href="requests.html">My Requests</a>
+  </nav>
+
+  <!-- Student profile menu -->
+  <div class="profile-wrap">
+
+    <button
+            class="profile-dot"
+            id="profile-toggle"
+            type="button"
+            aria-label="Open student account"
+            aria-expanded="false"
+    >
+      <span class="avatar-letter">P</span>
+      <i class="online-dot"></i>
+    </button>
+
+    <div class="profile-menu" id="profile-menu" hidden>
+
+      <div class="profile-heading">
+        <span class="profile-avatar">P</span>
+
+        <div>
+          <strong>Pratik S.</strong>
+          <small>Student account</small>
+        </div>
+      </div>
+
+      <div class="login-status">
+        <span></span>
+        Logged in
+      </div>
+
+      <a href="requests.html">My Requests</a>
+      <a href="give.html">Share an item</a>
+
+      <button type="button" id="sign-out">Sign out</button>
+
+    </div>
+  </div>
+
+</header>
+
+<main class="page">
+
+  <!-- Browse page introduction -->
+  <p class="eyebrow">Find something useful</p>
+
+  <h1 class="pagetitle">Available items</h1>
+
+  <p class="sub">
+    Have a look at what other students are sharing.
+  </p>
+
+  <!-- Search and category filter -->
+  <div class="tools">
+
+    <input
+            id="search"
+            placeholder="Search items..."
+            aria-label="Search items"
+    >
+
+    <select id="category">
+      <option>All</option>
+      <option>Food</option>
+      <option>School supplies</option>
+      <option>Personal care</option>
+      <option>Household</option>
+    </select>
+
+  </div>
+
+  <!-- Available items are added through JavaScript -->
+  <div id="item-grid" class="items"></div>
+
+  <p id="empty-message" hidden>
+    No items found. Try another search.
+  </p>
+
+</main>
+
+<!-- Popup showing selected item information -->
+<div id="modal" class="shade" hidden>
+
+  <section class="dialog">
+
+    <button id="close-modal" class="close">×</button>
+
+    <p class="eyebrow">Item details</p>
+
+    <h2 id="modal-title"></h2>
+
+    <span id="modal-category" class="pill"></span>
+
+    <p id="modal-condition"></p>
+
+    <p>
+      <b>Pickup spot:</b>
+      <span id="modal-pickup"></span>
+    </p>
+
+    <!-- Request the selected item -->
+    <button id="request-button" class="btn wide">
+      Request item
+    </button>
+
+    <p id="request-feedback" class="feedback"></p>
+
+  </section>
+</div>
+
+<!-- JavaScript file -->
+<script src="script.js"></script>
+
+</body>
+</html>
