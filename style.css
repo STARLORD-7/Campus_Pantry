@@ -414,12 +414,12 @@ h1 {
     color: var(--dark-green);
 }
 
+/* Search bar and category filter */
 .sub {
     margin: 8px 0 24px;
     color: var(--muted);
 }
 
-/* Search bar and category filter */
 .tools {
     display: flex;
     gap: 10px;
@@ -584,6 +584,40 @@ label:first-child {
     cursor: pointer;
 }
 
+/* Pay It Forward message */
+.pay-it-forward-message {
+    margin-top: 15px;
+    padding: 15px;
+    background: var(--light-green);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-align: center;
+}
+
+.pay-it-forward-message[hidden] {
+    display: none;
+}
+
+.pay-it-forward-message h3 {
+    margin: 0 0 8px;
+    color: var(--green);
+    font: normal 19px Georgia, serif;
+}
+
+.pay-it-forward-message p {
+    margin: 7px 0;
+    font-size: 12px;
+    color: var(--dark-green);
+    min-height: auto;
+}
+
+.pay-it-forward-message strong {
+    display: block;
+    margin-top: 10px;
+    color: var(--green);
+    font-size: 11px;
+}
+
 /* Request status and cancellation */
 .request-status {
     display: inline-block;
@@ -612,7 +646,6 @@ label:first-child {
 
 /* Tablet and smaller screens */
 @media (max-width: 760px) {
-
     header {
         min-height: 78px;
         padding: 13px 5%;
@@ -668,7 +701,6 @@ label:first-child {
 
 /* Mobile screen adjustments */
 @media (max-width: 560px) {
-
     .hero {
         grid-template-columns: 1fr;
         gap: 30px;
