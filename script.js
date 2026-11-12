@@ -199,6 +199,12 @@ if (grid) {
   const search = document.getElementById("search");
   const category = document.getElementById("category");
 
+  const modal = document.getElementById("modal");
+  const requestFeedback = document.getElementById("request-feedback");
+  const requestButton = document.getElementById("request-button");
+  const payItForwardMessage =
+      document.getElementById("pay-it-forward-message");
+
   function render() {
     const term = search.value.toLowerCase().trim();
 
@@ -230,6 +236,7 @@ if (grid) {
     });
   }
 
+  // Open item details.
   grid.addEventListener("click", event => {
     const button = event.target.closest("button[data-id]");
 
@@ -247,18 +254,22 @@ if (grid) {
     document.getElementById("modal-category").textContent = item.category;
     document.getElementById("modal-condition").textContent = item.condition;
     document.getElementById("modal-pickup").textContent = item.pickup;
-    document.getElementById("request-feedback").textContent = "";
 
-    const requestButton = document.getElementById("request-button");
+    requestFeedback.textContent = "";
+
+    // Hide the previous message when opening another item.
+    if (payItForwardMessage) {
+      payItForwardMessage.hidden = true;
+    }
 
     requestButton.disabled = false;
     requestButton.textContent = "Request item";
 
-    document.getElementById("modal").hidden = false;
+    modal.hidden = false;
   });
 
   // Save the request and remove the item from Browse.
-  document.getElementById("request-button").addEventListener("click", () => {
+  requestButton.addEventListener("click", () => {
     const item = items.find(entry => entry.id === selected);
 
     if (!item || !item.available) return;
@@ -282,22 +293,25 @@ if (grid) {
     saveRequests(requests);
     render();
 
-    document.getElementById("request-feedback").textContent =
-        "Request saved! You can see it on the My Requests page.";
+    requestFeedback.textContent =
+        "Your request has been saved. You can see it on the My Requests page.";
 
-    const button = document.getElementById("request-button");
+    // Show the Pay-It-Forward message after a successful request.
+    if (payItForwardMessage) {
+      payItForwardMessage.hidden = false;
+    }
 
-    button.textContent = "Requested";
-    button.disabled = true;
+    requestButton.textContent = "Requested";
+    requestButton.disabled = true;
   });
 
   function closeModal() {
-    document.getElementById("modal").hidden = true;
+    modal.hidden = true;
   }
 
   document.getElementById("close-modal").addEventListener("click", closeModal);
 
-  document.getElementById("modal").addEventListener("click", event => {
+  modal.addEventListener("click", event => {
     if (event.target.id === "modal") {
       closeModal();
     }
@@ -406,7 +420,7 @@ if (requestsList) {
 
     const items = getItems();
 
-    // itemId is used for new requests, with a name fallback for older ones.
+    // Restore the item so another student can request it.
     const item = items.find(entry =>
         request.itemId != null
             ? Number(entry.id) === Number(request.itemId)
