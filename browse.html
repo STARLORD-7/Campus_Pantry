@@ -17,15 +17,15 @@
 
   <a class="logo" href="index.html" aria-label="Campus Pantry home">
 
-            <span class="logo-mark" aria-hidden="true">
-                <span class="logo-leaf">✦</span>
-                <span class="logo-bowl"></span>
-            </span>
+    <span class="logo-mark" aria-hidden="true">
+      <span class="logo-leaf">✦</span>
+      <span class="logo-bowl"></span>
+    </span>
 
     <span class="logo-name">
-                Campus Pantry
-                <small>PAY IT FORWARD</small>
-            </span>
+      Campus Pantry
+      <small>PAY IT FORWARD</small>
+    </span>
 
   </a>
 
@@ -40,11 +40,11 @@
   <div class="profile-wrap">
 
     <button
-            class="profile-dot"
-            id="profile-toggle"
-            type="button"
-            aria-label="Open student account"
-            aria-expanded="false"
+      class="profile-dot"
+      id="profile-toggle"
+      type="button"
+      aria-label="Open student account"
+      aria-expanded="false"
     >
       <span class="avatar-letter">P</span>
       <i class="online-dot"></i>
@@ -91,9 +91,9 @@
   <div class="tools">
 
     <input
-            id="search"
-            placeholder="Search items..."
-            aria-label="Search items"
+      id="search"
+      placeholder="Search items..."
+      aria-label="Search items"
     >
 
     <select id="category">
@@ -120,7 +120,7 @@
 
   <section class="dialog">
 
-    <button id="close-modal" class="close">×</button>
+    <button id="close-modal" class="close" type="button">×</button>
 
     <p class="eyebrow">Item details</p>
 
@@ -136,11 +136,36 @@
     </p>
 
     <!-- Request the selected item -->
-    <button id="request-button" class="btn wide">
+    <button id="request-button" class="btn wide" type="button">
       Request item
     </button>
 
-    <p id="request-feedback" class="feedback"></p>
+    <p id="request-feedback" class="feedback" aria-live="polite"></p>
+
+    <!-- Pay It Forward message -->
+    <div
+      id="pay-it-forward-message"
+      class="pay-it-forward-message"
+      hidden
+    >
+
+      <h3>Keep Kindness Moving! 💚</h3>
+
+      <p>
+        Your request has been submitted successfully!
+        Enjoy your item, and remember that a little kindness goes a long way.
+      </p>
+
+      <p>
+        When you have something you no longer need, consider sharing it
+        with another student.
+      </p>
+
+      <strong>
+        Give what you can. Take what you need. Keep kindness moving.
+      </strong>
+
+    </div>
 
   </section>
 </div>
