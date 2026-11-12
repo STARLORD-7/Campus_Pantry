@@ -1,50 +1,47 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campus Pantry - Give</title>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Pantry - Home</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- Header and navigation -->
 <header>
 
   <a class="logo" href="index.html" aria-label="Campus Pantry home">
 
-      <span class="logo-mark" aria-hidden="true">
-        <span class="logo-leaf">✦</span>
-        <span class="logo-bowl"></span>
-      </span>
+    <span class="logo-mark" aria-hidden="true">
+      <span class="logo-leaf">✦</span>
+      <span class="logo-bowl"></span>
+    </span>
 
     <span class="logo-name">
-        Campus Pantry
-        <small>PAY IT FORWARD</small>
-      </span>
+      Campus Pantry
+      <small>PAY IT FORWARD</small>
+    </span>
 
   </a>
 
   <nav>
-    <a href="index.html">Home</a>
+    <a class="active" href="index.html">Home</a>
     <a href="browse.html">Browse items</a>
-    <a href="give.html" class="active">Give an item</a>
+    <a href="give.html">Give an item</a>
     <a href="requests.html">My Requests</a>
   </nav>
 
-  <!-- Student profile dropdown -->
   <div class="profile-wrap">
 
     <button
-            class="profile-dot"
-            id="profile-toggle"
-            type="button"
-            aria-label="Open student account"
-            aria-expanded="false"
+      class="profile-dot"
+      id="profile-toggle"
+      type="button"
+      aria-label="Open student account"
+      aria-expanded="false"
     >
       <span class="avatar-letter">P</span>
       <i class="online-dot"></i>
@@ -62,8 +59,7 @@
       </div>
 
       <div class="login-status">
-        <span></span>
-        Logged in
+        <span></span> Logged in
       </div>
 
       <a href="requests.html">My Requests</a>
@@ -76,70 +72,76 @@
 
 </header>
 
-<main class="page givepage">
+<main class="home">
 
-  <!-- Page introduction -->
-  <p class="eyebrow">Pass something along</p>
+  <section class="hero">
 
-  <h1 class="pagetitle">Share an item</h1>
+    <div class="hero-copy">
 
-  <p class="sub">
-    Have something in good condition that another student could use?
-  </p>
+      <p class="eyebrow">A little help goes a long way</p>
 
-  <!-- Form for sharing a new item -->
-  <form id="give-form">
+      <h1>
+        Give what you can.<br>
+        Take what you need.
+      </h1>
 
-    <label for="item-name">Item name</label>
-    <input
-            id="item-name"
-            required
-            maxlength="50"
-            placeholder="e.g. Notebook"
-    >
+      <p class="intro">
+        A simple place for students to share useful things with each other.
+        No buying or selling — just helping out.
+      </p>
 
-    <label for="item-category">Category</label>
-    <select id="item-category" required>
-      <option value="">Choose one</option>
-      <option>Food</option>
-      <option>School supplies</option>
-      <option>Personal care</option>
-      <option>Household</option>
-    </select>
+      <div class="hero-actions">
+        <a class="btn" href="browse.html">See available items</a>
+        <a class="link" href="give.html">Share something →</a>
+      </div>
 
-    <label for="item-condition">Condition</label>
-    <input
-            id="item-condition"
-            required
-            maxlength="100"
-            placeholder="e.g. Good condition"
-    >
+    </div>
 
-    <label for="pickup">Campus pickup spot</label>
-    <input
-            id="pickup"
-            required
-            maxlength="60"
-            placeholder="e.g. Student Centre"
-    >
+    <aside class="hero-photo-wrap">
 
-    <!-- Submit the new item -->
-    <button type="submit" class="btn wide">
-      Add my item
-    </button>
+      <img
+        class="hero-photo"
+        src="algoma-university.png"
+        alt="Algoma University entrance"
+      >
 
-    <p id="give-feedback" class="feedback" aria-live="polite"></p>
+      <p class="photo-caption">
+        Our community grows<br>
+        when we share.<br>
+        We grow with Algoma.
+      </p>
 
-  </form>
+    </aside>
 
-  <!-- Reminder for students -->
-  <p class="reminder">
-    ♡ Please only share clean, safe items. Don't add your home address.
-  </p>
+  </section>
+
+  <section class="how">
+
+    <h2>How it works</h2>
+
+    <div class="steps">
+
+      <p>
+        <b>01 · Browse</b><br>
+        <span>See what other students have shared.</span>
+      </p>
+
+      <p>
+        <b>02 · Request</b><br>
+        <span>Find something that could help you.</span>
+      </p>
+
+      <p>
+        <b>03 · Pay it forward</b><br>
+        <span>Share something when you can.</span>
+      </p>
+
+    </div>
+
+  </section>
 
 </main>
 
-<!-- JavaScript functionality -->
 <script src="script.js"></script>
 
 </body>
