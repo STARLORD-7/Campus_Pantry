@@ -4,14 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campus Pantry - Give</title>
+  <title>Campus Pantry - Give an Item</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <header>
-  <a class="logo" href="index.html" aria-label="Campus Pantry home">
+  <a class="logo" href="index.html">
     <span class="logo-mark" aria-hidden="true">
       <span class="logo-leaf">✦</span>
       <span class="logo-bowl"></span>
@@ -31,12 +30,8 @@
   </nav>
 
   <div class="profile-wrap">
-    <button
-      class="profile-dot"
-      id="profile-toggle"
-      type="button"
-      aria-label="Open student account"
-      aria-expanded="false">
+    <button class="profile-dot" id="profile-toggle" type="button"
+      aria-label="Open student account" aria-expanded="false">
       <span class="avatar-letter">P</span>
       <i class="online-dot"></i>
     </button>
@@ -51,14 +46,12 @@
       </div>
 
       <div class="login-status">
-        <span></span>
-        Logged in
+        <span></span> Logged in
       </div>
 
       <a href="requests.html">My Requests</a>
       <a href="my-listings.html">My Listings</a>
       <a href="give.html">Share an item</a>
-
       <button type="button" id="sign-out">Sign out</button>
     </div>
   </div>
@@ -66,53 +59,43 @@
 
 <main class="page givepage">
 
-  <p class="eyebrow">Pass something along</p>
-
-  <h1 class="pagetitle">Share an item</h1>
+  <p class="eyebrow">Share with your community</p>
+  <h1 class="pagetitle">Give an item</h1>
 
   <p class="sub">
-    Have something in good condition that another student could use?
+    Have something you no longer need? Share it with another student.
   </p>
 
   <form id="give-form">
 
     <label for="item-name">Item name</label>
-    <input
-      id="item-name"
-      required
-      maxlength="50"
-      placeholder="e.g. Notebook">
+    <input id="item-name" type="text"
+      placeholder="e.g. Notebook" required>
 
     <label for="item-category">Category</label>
     <select id="item-category" required>
-      <option value="">Choose one</option>
-      <option>Food</option>
-      <option>School supplies</option>
-      <option>Personal care</option>
-      <option>Household</option>
+      <option value="">Choose a category</option>
+      <option value="Food">Food</option>
+      <option value="School supplies">School supplies</option>
+      <option value="Personal care">Personal care</option>
+      <option value="Household">Household</option>
     </select>
 
-    <label for="item-condition">Condition</label>
-    <input
-      id="item-condition"
-      required
-      maxlength="100"
-      placeholder="e.g. Good condition">
+    <label for="item-condition">Condition or description</label>
+    <input id="item-condition" type="text"
+      placeholder="Describe the item's condition" required>
 
-    <label for="pickup">Campus pickup spot</label>
+    <label for="pickup">Meeting point</label>
     <select id="pickup" required>
       <option value="">Choose a meeting point</option>
-      <option>Student Centre</option>
-      <option>Library entrance</option>
-      <option>Main lobby</option>
+      <option value="Student Centre">Student Centre</option>
+      <option value="Library entrance">Library entrance</option>
+      <option value="Main lobby">Main lobby</option>
     </select>
 
     <fieldset class="availability-fieldset">
-      <legend>Days you are available to meet</legend>
-
-      <p class="form-note">
-        Select the days when you can meet. Requesters will only be able to choose these days.
-      </p>
+      <legend>Available days</legend>
+      <p class="form-note">Select the days when students can meet you.</p>
 
       <div class="availability-options">
         <label><input type="checkbox" name="available-days" value="Monday"> Monday</label>
@@ -126,11 +109,8 @@
     </fieldset>
 
     <fieldset class="availability-fieldset">
-      <legend>Times you are available</legend>
-
-      <p class="form-note">
-        Select the times when you can meet. These times will apply to all the days selected above.
-      </p>
+      <legend>Available times</legend>
+      <p class="form-note">Select the times when you are available.</p>
 
       <div class="availability-options">
         <label><input type="checkbox" name="available-times" value="09:30"> 9:30 AM</label>
@@ -144,25 +124,28 @@
       </div>
     </fieldset>
 
-    <p class="form-note">
-      You can view and cancel your available listings anytime from My Listings.
-    </p>
-
-    <button type="submit" class="btn wide">
-      Add my item
-    </button>
+    <button type="submit" class="btn wide">List Item</button>
 
     <p id="give-feedback" class="feedback" aria-live="polite"></p>
 
   </form>
 
-  <p class="reminder">
-    ♡ Please only share clean, safe items. Don't add your home address.
-  </p>
+  <!-- Listing success confirmation -->
+  <div id="listing-success" class="pay-it-forward-message" hidden>
+    <h3>Item listed successfully! 💚</h3>
+    <p>Your item has been added to Campus Pantry.</p>
+
+    <a href="my-listings.html" class="btn wide">
+      View My Listings
+    </a>
+
+    <button type="button" id="list-another" class="btn wide">
+      List Another Item
+    </button>
+  </div>
 
 </main>
 
 <script src="script.js"></script>
-
 </body>
 </html>
