@@ -1,7 +1,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,13 +11,11 @@
 <body>
 
 <header>
-
   <a class="logo" href="index.html" aria-label="Campus Pantry home">
     <span class="logo-mark" aria-hidden="true">
       <span class="logo-leaf">✦</span>
       <span class="logo-bowl"></span>
     </span>
-
     <span class="logo-name">
       Campus Pantry
       <small>PAY IT FORWARD</small>
@@ -34,8 +31,8 @@
   </nav>
 
   <div class="profile-wrap">
-
-    <button class="profile-dot"
+    <button
+      class="profile-dot"
       id="profile-toggle"
       type="button"
       aria-label="Open student account"
@@ -45,7 +42,6 @@
     </button>
 
     <div class="profile-menu" id="profile-menu" hidden>
-
       <div class="profile-heading">
         <span class="profile-avatar">P</span>
         <div>
@@ -64,10 +60,8 @@
       <a href="give.html">Share an item</a>
 
       <button type="button" id="sign-out">Sign out</button>
-
     </div>
   </div>
-
 </header>
 
 <main class="page givepage">
@@ -105,29 +99,53 @@
       maxlength="100"
       placeholder="e.g. Good condition">
 
-    <label for="pickup">Meeting point</label>
+    <label for="pickup">Campus pickup spot</label>
     <select id="pickup" required>
       <option value="">Choose a meeting point</option>
-      <option value="Student Centre">Student Centre</option>
-      <option value="Library entrance">Library entrance</option>
-      <option value="Main lobby">Main lobby</option>
+      <option>Student Centre</option>
+      <option>Library entrance</option>
+      <option>Main lobby</option>
     </select>
 
-    <label for="meetup-date">Preferred meetup date</label>
-    <input
-      id="meetup-date"
-      type="date"
-      required>
+    <fieldset class="availability-fieldset">
+      <legend>Days you are available to meet</legend>
 
-    <label for="meetup-time">Preferred meetup time</label>
-    <input
-      id="meetup-time"
-      type="time"
-      required>
+      <p class="form-note">
+        Select the days when you can meet. Requesters will only be able to choose these days.
+      </p>
+
+      <div class="availability-options">
+        <label><input type="checkbox" name="available-days" value="Monday"> Monday</label>
+        <label><input type="checkbox" name="available-days" value="Tuesday"> Tuesday</label>
+        <label><input type="checkbox" name="available-days" value="Wednesday"> Wednesday</label>
+        <label><input type="checkbox" name="available-days" value="Thursday"> Thursday</label>
+        <label><input type="checkbox" name="available-days" value="Friday"> Friday</label>
+        <label><input type="checkbox" name="available-days" value="Saturday"> Saturday</label>
+        <label><input type="checkbox" name="available-days" value="Sunday"> Sunday</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="availability-fieldset">
+      <legend>Times you are available</legend>
+
+      <p class="form-note">
+        Select the times when you can meet. These times will apply to all the days selected above.
+      </p>
+
+      <div class="availability-options">
+        <label><input type="checkbox" name="available-times" value="09:30"> 9:30 AM</label>
+        <label><input type="checkbox" name="available-times" value="10:30"> 10:30 AM</label>
+        <label><input type="checkbox" name="available-times" value="11:30"> 11:30 AM</label>
+        <label><input type="checkbox" name="available-times" value="12:30"> 12:30 PM</label>
+        <label><input type="checkbox" name="available-times" value="13:30"> 1:30 PM</label>
+        <label><input type="checkbox" name="available-times" value="14:30"> 2:30 PM</label>
+        <label><input type="checkbox" name="available-times" value="15:30"> 3:30 PM</label>
+        <label><input type="checkbox" name="available-times" value="16:30"> 4:30 PM</label>
+      </div>
+    </fieldset>
 
     <p class="form-note">
-      Choose a convenient campus meeting point, date and time.
-      Students will see these details when browsing your item.
+      You can view and cancel your available listings anytime from My Listings.
     </p>
 
     <button type="submit" class="btn wide">
