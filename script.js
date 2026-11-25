@@ -50,6 +50,31 @@ const meetingTimes = [
   "16:30"
 ];
 
+const weekdays = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday"
+];
+
+function formatAvailability(days, times) {
+  const dayText = Array.isArray(days) && days.length ? days.join(", ") : "Not set";
+  const timeText = Array.isArray(times) && times.length ? times.map(formatTime).join(", ") : "Not set";
+  return `${dayText} · ${timeText}`;
+}
+
+function randomAvailability() {
+  const shuffledDays = [...weekdays].sort(() => Math.random() - 0.5);
+  const shuffledTimes = [...meetingTimes].sort(() => Math.random() - 0.5);
+  return {
+    availableDays: shuffledDays.slice(0, 3),
+    availableTimes: shuffledTimes.slice(0, 2)
+  };
+}
+
 // Sample listings for Browse Items.
 const initial = [
   {
@@ -199,60 +224,75 @@ function formatTime(timeString) {
   return `${hour}:${minute} ${period}`;
 }
 
+// One-time migration key for old demo listings.
+// Changing this value forces the demo listings to receive fresh dummy meetup details once.
+const DEMO_MEETUP_MIGRATION_KEY = "campusPantryOwnerAvailabilityMigration_v4";
+
 // Get and prepare all listings.
 function getItems() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY));
 
-    // FIX: Use sample listings when browser storage is empty.
+    // Use saved listings when available; otherwise start with the demo listings.
     const source = Array.isArray(saved) ? saved : initial;
 
+    // Restore any sample listings that are missing from browser storage.
     const missing = initial.filter(seed =>
-      !source.some(item => Number(item.id) === seed.id)
+      !source.some(item => Number(item.id) === Number(seed.id))
     );
 
+    const migrationNeeded =
+      localStorage.getItem(DEMO_MEETUP_MIGRATION_KEY) !== "done";
+
     const merged = [...source, ...missing].map(item => {
-      const isSample = initial.some(
-        seed => Number(seed.id) === Number(item.id)
-      );
+      const sample = initial.find(seed => Number(seed.id) === Number(item.id));
+      const isSample = Boolean(sample);
+      const validPickup = meetingPoints.includes(item.pickup);
+      const shouldRefreshSampleMeetup = migrationNeeded && isSample;
 
-      const oldDate =
-        !item.meetupDate ||
-        item.meetupDate === "Arrange after request";
+      let availableDays = Array.isArray(item.availableDays) ? item.availableDays : [];
+      let availableTimes = Array.isArray(item.availableTimes) ? item.availableTimes : [];
 
-      const oldTime =
-        !item.meetupTime ||
-        item.meetupTime === "Contact the listing owner";
+      // Convert old demo date/time data into weekday/time availability.
+      if (shouldRefreshSampleMeetup || !availableDays.length || !availableTimes.length) {
+        if (isSample) {
+          const generated = randomAvailability();
+          availableDays = generated.availableDays;
+          availableTimes = generated.availableTimes;
+        } else {
+          if (!availableDays.length) {
+            const oldDate = item.meetupDate && !String(item.meetupDate).toLowerCase().includes("arrange")
+              ? new Date(item.meetupDate + "T00:00:00") : null;
+            const oldDay = oldDate && !Number.isNaN(oldDate.getTime())
+              ? ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][oldDate.getDay()]
+              : weekdays.slice(0, 3);
+            availableDays = Array.isArray(oldDay) ? oldDay : [oldDay];
+          }
 
-      const oldPickup =
-        !item.pickup ||
-        !meetingPoints.includes(item.pickup);
+          if (!availableTimes.length) {
+            const oldTime = item.meetupTime && meetingTimes.includes(item.meetupTime)
+              ? [item.meetupTime] : [randomChoice(meetingTimes)];
+            availableTimes = oldTime;
+          }
+        }
+      }
 
       return {
         ...item,
-
-        owner: item.owner ||
-          (isSample ? "Campus Pantry Student" : CURRENT_STUDENT),
-
-        // Keep existing campus meeting points.
-        pickup: oldPickup
-          ? randomChoice(meetingPoints)
-          : item.pickup,
-
-        // Generate dummy dates for old sample listings.
-        meetupDate: oldDate
-          ? randomDate()
-          : item.meetupDate,
-
-        // Generate dummy times for old sample listings.
-        meetupTime: oldTime
-          ? randomChoice(meetingTimes)
-          : item.meetupTime
+        owner: item.owner || (isSample ? "Campus Pantry Student" : CURRENT_STUDENT),
+        pickup: validPickup ? item.pickup : randomChoice(meetingPoints),
+        availableDays: availableDays.filter(day => weekdays.includes(day)),
+        availableTimes: availableTimes.filter(time => meetingTimes.includes(time))
       };
     });
 
-    // Save generated details so they stay the same after refresh.
+    // Save the generated details so they remain consistent after refresh.
     saveItems(merged);
+
+    // Mark migration complete only after saving the updated listings.
+    if (migrationNeeded) {
+      localStorage.setItem(DEMO_MEETUP_MIGRATION_KEY, "done");
+    }
 
     return merged;
 
@@ -351,8 +391,7 @@ if (grid) {
         </small>
 
         <small>
-          Meetup: ${esc(formatDate(item.meetupDate))}
-          · ${esc(formatTime(item.meetupTime))}
+          Meetup: ${esc(formatAvailability(item.availableDays, item.availableTimes))}
         </small>
 
         <button class="btn" data-id="${item.id}">
@@ -388,7 +427,23 @@ if (grid) {
       item.owner || "Campus Pantry Student";
 
     document.getElementById("modal-meetup").textContent =
-      `${formatDate(item.meetupDate)} · ${formatTime(item.meetupTime)}`;
+      formatAvailability(item.availableDays, item.availableTimes);
+
+    const requestDay = document.getElementById("request-day");
+    const requestTime = document.getElementById("request-time");
+
+    requestDay.innerHTML = '<option value="">Choose an available day</option>' +
+      (item.availableDays || []).map(day =>
+        `<option value="${esc(day)}">${esc(day)}</option>`
+      ).join("");
+
+    requestTime.innerHTML = '<option value="">Choose an available time</option>' +
+      (item.availableTimes || []).map(time =>
+        `<option value="${esc(time)}">${esc(formatTime(time))}</option>`
+      ).join("");
+
+    requestDay.disabled = !(item.availableDays || []).length;
+    requestTime.disabled = !(item.availableTimes || []).length;
 
     requestFeedback.textContent = "";
 
@@ -410,6 +465,22 @@ if (grid) {
 
     if (!item || !item.available) return;
 
+    const selectedDay = document.getElementById("request-day").value;
+    const selectedTime = document.getElementById("request-time").value;
+
+    if (!selectedDay || !selectedTime) {
+      requestFeedback.textContent =
+        "Please choose one of the owner's available days and times.";
+      return;
+    }
+
+    if (
+      !(item.availableDays || []).includes(selectedDay) ||
+      !(item.availableTimes || []).includes(selectedTime)
+    ) {
+      return;
+    }
+
     item.available = false;
 
     saveItems(items);
@@ -424,8 +495,8 @@ if (grid) {
       condition: item.condition,
       pickup: item.pickup,
       owner: item.owner,
-      meetupDate: item.meetupDate,
-      meetupTime: item.meetupTime,
+      meetupDay: selectedDay,
+      meetupTime: selectedTime,
       date: new Date().toLocaleString(),
       status: "Requested"
     });
@@ -487,17 +558,24 @@ if (form) {
     // The selected campus meeting point is saved as pickup.
     const pickup = document.getElementById("pickup").value;
 
-    const meetupDate = document.getElementById("meetup-date").value;
-    const meetupTime = document.getElementById("meetup-time").value;
+    const availableDays = [
+      ...document.querySelectorAll('input[name="available-days"]:checked')
+    ].map(input => input.value);
+
+    const availableTimes = [
+      ...document.querySelectorAll('input[name="available-times"]:checked')
+    ].map(input => input.value);
 
     if (
       !name ||
       !category ||
       !condition ||
       !pickup ||
-      !meetupDate ||
-      !meetupTime
+      !availableDays.length ||
+      !availableTimes.length
     ) {
+      document.getElementById("give-feedback").textContent =
+        "Please choose at least one available day and one available time.";
       return;
     }
 
@@ -508,8 +586,8 @@ if (form) {
       condition,
       pickup,
       owner: CURRENT_STUDENT,
-      meetupDate,
-      meetupTime,
+      availableDays,
+      availableTimes,
       available: true,
       listingStatus: "Available"
     });
@@ -551,11 +629,13 @@ if (requestsList) {
 
         <p>Category: ${esc(request.category)}</p>
 
+        <p>Listed by: ${esc(request.owner || "Campus Pantry Student")}</p>
+
         <p>Meeting point: ${esc(request.pickup)}</p>
 
         <p>
           Meetup:
-          ${esc(formatDate(request.meetupDate))}
+          ${esc(request.meetupDay || "Not selected")}
           · ${esc(formatTime(request.meetupTime))}
         </p>
 
@@ -643,8 +723,7 @@ if (myListings) {
 
         <p>
           Meetup:
-          ${esc(formatDate(item.meetupDate))}
-          · ${esc(formatTime(item.meetupTime))}
+          ${esc(formatAvailability(item.availableDays, item.availableTimes))}
         </p>
 
         <p>Listed by: ${esc(item.owner)}</p>
