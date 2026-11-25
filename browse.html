@@ -100,7 +100,7 @@
 
 </main>
 
-<!-- Item details and request popup -->
+<!-- Item details popup -->
 <div id="modal" class="shade" hidden>
 
   <section class="dialog">
@@ -132,17 +132,13 @@
 
     <div class="availability-selection">
 
-      <label for="request-day">
-        Choose an available day
-      </label>
+      <label for="request-day">Choose an available day</label>
 
       <select id="request-day" required>
         <option value="">Choose an available day</option>
       </select>
 
-      <label for="request-time">
-        Choose an available time
-      </label>
+      <label for="request-time">Choose an available time</label>
 
       <select id="request-time" required>
         <option value="">Choose an available time</option>
@@ -160,29 +156,18 @@
       aria-live="polite"
     ></p>
 
+    <!-- Short success message -->
     <div
       id="pay-it-forward-message"
       class="pay-it-forward-message"
       hidden
     >
-      <h3>Keep Kindness Moving! 💚</h3>
-
-      <p>
-        Your request has been submitted successfully!
-        Enjoy your item, and remember that a little kindness goes a long way.
-      </p>
-
-      <p>
-        When you have something you no longer need, consider sharing it
-        with another student.
-      </p>
-
-      <strong>
-        Give what you can. Take what you need. Keep kindness moving.
-      </strong>
+      <h3>Request Sent! 💚</h3>
+      <p>Thanks for keeping kindness moving!</p>
     </div>
 
   </section>
+
 </div>
 
 <script src="script.js"></script>
