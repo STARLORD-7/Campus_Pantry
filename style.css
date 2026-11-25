@@ -644,6 +644,19 @@ label:first-child {
     font-size: 13px;
 }
 
+/* Meetup details and listing management */
+.form-note {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 4px 0 14px;
+}
+
+.listing-status {
+    display: inline-block;
+    margin: 8px 0;
+    color: var(--green);
+}
+
 /* Tablet and smaller screens */
 @media (max-width: 760px) {
     header {
