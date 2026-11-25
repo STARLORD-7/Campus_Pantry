@@ -35,13 +35,11 @@
 
   <div class="profile-wrap">
 
-    <button
-      class="profile-dot"
+    <button class="profile-dot"
       id="profile-toggle"
       type="button"
       aria-label="Open student account"
-      aria-expanded="false"
-    >
+      aria-expanded="false">
       <span class="avatar-letter">P</span>
       <i class="online-dot"></i>
     </button>
@@ -50,7 +48,6 @@
 
       <div class="profile-heading">
         <span class="profile-avatar">P</span>
-
         <div>
           <strong>Pratik S.</strong>
           <small>Student account</small>
@@ -90,8 +87,7 @@
       id="item-name"
       required
       maxlength="50"
-      placeholder="e.g. Notebook"
-    >
+      placeholder="e.g. Notebook">
 
     <label for="item-category">Category</label>
     <select id="item-category" required>
@@ -107,33 +103,31 @@
       id="item-condition"
       required
       maxlength="100"
-      placeholder="e.g. Good condition"
-    >
+      placeholder="e.g. Good condition">
 
-    <label for="pickup">Campus pickup spot</label>
-    <input
-      id="pickup"
-      required
-      maxlength="60"
-      placeholder="e.g. Student Centre"
-    >
+    <label for="pickup">Meeting point</label>
+    <select id="pickup" required>
+      <option value="">Choose a meeting point</option>
+      <option value="Student Centre">Student Centre</option>
+      <option value="Library entrance">Library entrance</option>
+      <option value="Main lobby">Main lobby</option>
+    </select>
 
     <label for="meetup-date">Preferred meetup date</label>
     <input
       id="meetup-date"
       type="date"
-      required
-    >
+      required>
 
     <label for="meetup-time">Preferred meetup time</label>
     <input
       id="meetup-time"
       type="time"
-      required
-    >
+      required>
 
     <p class="form-note">
-      Your listing will be shown under My Listings, where you can cancel it while it is available.
+      Choose a convenient campus meeting point, date and time.
+      Students will see these details when browsing your item.
     </p>
 
     <button type="submit" class="btn wide">
