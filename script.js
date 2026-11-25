@@ -3,6 +3,27 @@ const KEY = "campusPantrySimpleItems";
 const REQUESTS_KEY = "campusPantryRequests";
 const CURRENT_STUDENT = "Pratik S.";
 
+// DEMO STUDENT NAMES
+const demoStudentNames = [
+  "Alex Morgan",
+  "Sarah Wilson",
+  "Daniel Kim",
+  "Emily Chen",
+  "Ryan Patel",
+  "Olivia Brown",
+  "Jason Lee",
+  "Maya Sharma",
+  "Ethan Clark",
+  "Sophia Davis",
+  "Noah Martin",
+  "Ava Thompson"
+];
+
+function getDemoOwner(id) {
+  const index = (Number(id) - 1) % demoStudentNames.length;
+  return demoStudentNames[index >= 0 ? index : 0];
+}
+
 const meetingPoints = [
   "Student Centre",
   "Library entrance",
@@ -176,15 +197,22 @@ function getItems() {
 
       return {
         ...item,
-        owner: item.owner || (
-          isSample ? "Campus Pantry Student" : CURRENT_STUDENT
-        ),
+
+        // Give each demo listing its own consistent student name
+        owner: isSample
+          ? getDemoOwner(item.id)
+          : (item.owner && item.owner !== "Campus Pantry Student"
+              ? item.owner
+              : CURRENT_STUDENT),
+
         pickup: meetingPoints.includes(item.pickup)
           ? item.pickup
           : randomChoice(meetingPoints),
+
         availableDays: availableDays.filter(day =>
           weekdays.includes(day)
         ),
+
         availableTimes: availableTimes.filter(time =>
           meetingTimes.includes(time)
         )
@@ -201,7 +229,10 @@ function getItems() {
 
   } catch (error) {
     console.error("Error loading listings:", error);
-    return initial;
+    return initial.map(item => ({
+      ...item,
+      owner: getDemoOwner(item.id)
+    }));
   }
 }
 
@@ -209,7 +240,27 @@ function getItems() {
 function getRequests() {
   try {
     const value = JSON.parse(localStorage.getItem(REQUESTS_KEY));
-    return Array.isArray(value) ? value : [];
+    if (!Array.isArray(value)) return [];
+
+    // Update old demo request owner names
+    const requests = value.map(request => {
+      if (
+        request.owner === "Campus Pantry Student" &&
+        Number(request.itemId) >= 1 &&
+        Number(request.itemId) <= 12
+      ) {
+        return {
+          ...request,
+          owner: getDemoOwner(request.itemId)
+        };
+      }
+
+      return request;
+    });
+
+    localStorage.setItem(REQUESTS_KEY, JSON.stringify(requests));
+    return requests;
+
   } catch {
     return [];
   }
