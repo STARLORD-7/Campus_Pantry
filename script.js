@@ -6,12 +6,10 @@ const profileMenu = document.getElementById("profile-menu");
 if (profileToggle && profileMenu) {
   profileToggle.addEventListener("click", () => {
     const isOpen = !profileMenu.hidden;
-
     profileMenu.hidden = isOpen;
     profileToggle.setAttribute("aria-expanded", String(!isOpen));
   });
 
-  // Close the menu when clicking somewhere outside it.
   document.addEventListener("click", event => {
     if (!event.target.closest(".profile-wrap")) {
       profileMenu.hidden = true;
@@ -21,11 +19,9 @@ if (profileToggle && profileMenu) {
 
   document.getElementById("sign-out")?.addEventListener("click", () => {
     profileMenu.querySelector(".login-status").innerHTML =
-        "<span></span> Signed out (demo)";
-
+      "<span></span> Signed out (demo)";
     profileMenu.querySelector(".profile-heading small").textContent =
-        "Guest account";
-
+      "Guest account";
     profileToggle.querySelector(".avatar-letter").textContent = "G";
     profileToggle.querySelector(".online-dot").style.background = "#aaa";
   });
@@ -33,121 +29,48 @@ if (profileToggle && profileMenu) {
 
 const KEY = "campusPantrySimpleItems";
 const REQUESTS_KEY = "campusPantryRequests";
+const CURRENT_STUDENT = "Pratik S.";
 
 // Sample listings for the Browse page.
 const initial = [
-  {
-    id: 1,
-    name: "Notebook",
-    category: "School supplies",
-    condition: "Good condition",
-    pickup: "Student Centre",
-    available: true
-  },
-  {
-    id: 2,
-    name: "Pasta (unopened)",
-    category: "Food",
-    condition: "Unopened package",
-    pickup: "Library entrance",
-    available: true
-  },
-  {
-    id: 3,
-    name: "Winter scarf",
-    category: "Household",
-    condition: "Clean and gently used",
-    pickup: "Student Centre",
-    available: true
-  },
-  {
-    id: 4,
-    name: "Travel-size shampoo",
-    category: "Personal care",
-    condition: "New and unopened",
-    pickup: "Library entrance",
-    available: true
-  },
-  {
-    id: 5,
-    name: "Biology textbook",
-    category: "School supplies",
-    condition: "Used, readable condition",
-    pickup: "Main lobby",
-    available: true
-  },
-  {
-    id: 6,
-    name: "Reusable water bottle",
-    category: "Household",
-    condition: "Clean and in good condition",
-    pickup: "Student Centre",
-    available: true
-  },
-  {
-    id: 7,
-    name: "Instant oatmeal (unopened)",
-    category: "Food",
-    condition: "Unopened package",
-    pickup: "Library entrance",
-    available: true
-  },
-  {
-    id: 8,
-    name: "Pens and highlighters",
-    category: "School supplies",
-    condition: "Good condition",
-    pickup: "Main lobby",
-    available: true
-  },
-  {
-    id: 9,
-    name: "Scientific calculator",
-    category: "School supplies",
-    condition: "Works properly, gently used",
-    pickup: "Student Centre",
-    available: true
-  },
-  {
-    id: 10,
-    name: "Granola bars (unopened)",
-    category: "Food",
-    condition: "Sealed package",
-    pickup: "Library entrance",
-    available: true
-  },
-  {
-    id: 11,
-    name: "Reusable lunch container",
-    category: "Household",
-    condition: "Clean and in good condition",
-    pickup: "Main lobby",
-    available: true
-  },
-  {
-    id: 12,
-    name: "Warm winter gloves",
-    category: "Household",
-    condition: "Clean and gently used",
-    pickup: "Student Centre",
-    available: true
-  }
+  { id: 1, name: "Notebook", category: "School supplies", condition: "Good condition", pickup: "Student Centre", available: true },
+  { id: 2, name: "Pasta (unopened)", category: "Food", condition: "Unopened package", pickup: "Library entrance", available: true },
+  { id: 3, name: "Winter scarf", category: "Household", condition: "Clean and gently used", pickup: "Student Centre", available: true },
+  { id: 4, name: "Travel-size shampoo", category: "Personal care", condition: "New and unopened", pickup: "Library entrance", available: true },
+  { id: 5, name: "Biology textbook", category: "School supplies", condition: "Used, readable condition", pickup: "Main lobby", available: true },
+  { id: 6, name: "Reusable water bottle", category: "Household", condition: "Clean and in good condition", pickup: "Student Centre", available: true },
+  { id: 7, name: "Instant oatmeal (unopened)", category: "Food", condition: "Unopened package", pickup: "Library entrance", available: true },
+  { id: 8, name: "Pens and highlighters", category: "School supplies", condition: "Good condition", pickup: "Main lobby", available: true },
+  { id: 9, name: "Scientific calculator", category: "School supplies", condition: "Works properly, gently used", pickup: "Student Centre", available: true },
+  { id: 10, name: "Granola bars (unopened)", category: "Food", condition: "Sealed package", pickup: "Library entrance", available: true },
+  { id: 11, name: "Reusable lunch container", category: "Household", condition: "Clean and in good condition", pickup: "Main lobby", available: true },
+  { id: 12, name: "Warm winter gloves", category: "Household", condition: "Clean and gently used", pickup: "Student Centre", available: true }
 ];
 
 function getItems() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY));
-
     if (!Array.isArray(saved)) return initial;
 
-    // Add new demo listings without overwriting existing changes.
     const missing = initial.filter(seed =>
-        !saved.some(item => Number(item.id) === seed.id)
+      !saved.some(item => Number(item.id) === seed.id)
     );
 
-    const merged = [...saved, ...missing];
+    const merged = [...saved, ...missing].map(item => ({
+      ...item,
+      owner: item.owner || (
+        initial.some(seed => Number(seed.id) === Number(item.id))
+          ? "Campus Pantry Student" : CURRENT_STUDENT
+      ),
+      meetupDate: item.meetupDate || "Arrange after request",
+      meetupTime: item.meetupTime || "Contact the listing owner"
+    }));
 
-    if (missing.length) {
+    if (missing.length || merged.some((item, i) =>
+      item.owner !== saved[i]?.owner ||
+      item.meetupDate !== saved[i]?.meetupDate ||
+      item.meetupTime !== saved[i]?.meetupTime
+    )) {
       saveItems(merged);
     }
 
@@ -198,20 +121,19 @@ if (grid) {
 
   const search = document.getElementById("search");
   const category = document.getElementById("category");
-
   const modal = document.getElementById("modal");
   const requestFeedback = document.getElementById("request-feedback");
   const requestButton = document.getElementById("request-button");
   const payItForwardMessage =
-      document.getElementById("pay-it-forward-message");
+    document.getElementById("pay-it-forward-message");
 
   function render() {
     const term = search.value.toLowerCase().trim();
 
     const shown = items.filter(item =>
-        item.available &&
-        item.name.toLowerCase().includes(term) &&
-        (category.value === "All" || item.category === category.value)
+      item.available &&
+      item.name.toLowerCase().includes(term) &&
+      (category.value === "All" || item.category === category.value)
     );
 
     grid.innerHTML = "";
@@ -219,33 +141,29 @@ if (grid) {
 
     shown.forEach(item => {
       const card = document.createElement("article");
-
       card.className = "item";
 
       card.innerHTML = `
-                <span class="pill">${esc(item.category)}</span>
-                <h3>${esc(item.name)}</h3>
-                <p>${esc(item.condition)}</p>
-                <small>Pickup: ${esc(item.pickup)}</small>
-                <button class="btn" data-id="${item.id}">
-                    View details
-                </button>
-            `;
+        <span class="pill">${esc(item.category)}</span>
+        <h3>${esc(item.name)}</h3>
+        <p>${esc(item.condition)}</p>
+        <small>Listed by: ${esc(item.owner || "Campus Pantry Student")}</small>
+        <small>Pickup: ${esc(item.pickup)}</small>
+        <small>Meetup: ${esc(item.meetupDate || "Arrange after request")} · ${esc(item.meetupTime || "Contact listing owner")}</small>
+        <button class="btn" data-id="${item.id}">View details</button>
+      `;
 
       grid.appendChild(card);
     });
   }
 
-  // Open item details.
   grid.addEventListener("click", event => {
     const button = event.target.closest("button[data-id]");
-
     if (!button) return;
 
     const item = items.find(entry =>
-        entry.id === Number(button.dataset.id)
+      entry.id === Number(button.dataset.id)
     );
-
     if (!item) return;
 
     selected = item.id;
@@ -254,31 +172,27 @@ if (grid) {
     document.getElementById("modal-category").textContent = item.category;
     document.getElementById("modal-condition").textContent = item.condition;
     document.getElementById("modal-pickup").textContent = item.pickup;
+    document.getElementById("modal-owner").textContent =
+      item.owner || "Campus Pantry Student";
+    document.getElementById("modal-meetup").textContent =
+      `${item.meetupDate || "Arrange after request"} · ${item.meetupTime || "Contact listing owner"}`;
 
     requestFeedback.textContent = "";
-
-    // Hide the previous message when opening another item.
-    if (payItForwardMessage) {
-      payItForwardMessage.hidden = true;
-    }
+    if (payItForwardMessage) payItForwardMessage.hidden = true;
 
     requestButton.disabled = false;
     requestButton.textContent = "Request item";
-
     modal.hidden = false;
   });
 
-  // Save the request and remove the item from Browse.
   requestButton.addEventListener("click", () => {
     const item = items.find(entry => entry.id === selected);
-
     if (!item || !item.available) return;
 
     item.available = false;
     saveItems(items);
 
     const requests = getRequests();
-
     requests.unshift({
       id: Date.now(),
       itemId: item.id,
@@ -286,6 +200,9 @@ if (grid) {
       category: item.category,
       condition: item.condition,
       pickup: item.pickup,
+      owner: item.owner || "Campus Pantry Student",
+      meetupDate: item.meetupDate || "Arrange after request",
+      meetupTime: item.meetupTime || "Contact listing owner",
       date: new Date().toLocaleString(),
       status: "Requested"
     });
@@ -294,12 +211,9 @@ if (grid) {
     render();
 
     requestFeedback.textContent =
-        "Your request has been saved. You can see it on the My Requests page.";
+      "Your request has been saved. You can see it on the My Requests page.";
 
-    // Show the Pay-It-Forward message after a successful request.
-    if (payItForwardMessage) {
-      payItForwardMessage.hidden = false;
-    }
+    if (payItForwardMessage) payItForwardMessage.hidden = false;
 
     requestButton.textContent = "Requested";
     requestButton.disabled = true;
@@ -312,20 +226,15 @@ if (grid) {
   document.getElementById("close-modal").addEventListener("click", closeModal);
 
   modal.addEventListener("click", event => {
-    if (event.target.id === "modal") {
-      closeModal();
-    }
+    if (event.target.id === "modal") closeModal();
   });
 
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape") {
-      closeModal();
-    }
+    if (event.key === "Escape") closeModal();
   });
 
   search.addEventListener("input", render);
   category.addEventListener("change", render);
-
   render();
 }
 
@@ -337,13 +246,14 @@ if (form) {
     event.preventDefault();
 
     const items = getItems();
-
     const name = document.getElementById("item-name").value.trim();
     const category = document.getElementById("item-category").value;
     const condition = document.getElementById("item-condition").value.trim();
     const pickup = document.getElementById("pickup").value.trim();
+    const meetupDate = document.getElementById("meetup-date").value;
+    const meetupTime = document.getElementById("meetup-time").value;
 
-    if (!name || !category || !condition || !pickup) return;
+    if (!name || !category || !condition || !pickup || !meetupDate || !meetupTime) return;
 
     items.unshift({
       id: Date.now(),
@@ -351,14 +261,18 @@ if (form) {
       category,
       condition,
       pickup,
-      available: true
+      owner: CURRENT_STUDENT,
+      meetupDate,
+      meetupTime,
+      available: true,
+      listingStatus: "Available"
     });
 
     saveItems(items);
     form.reset();
 
     document.getElementById("give-feedback").textContent =
-        "Thanks! Your item has been added.";
+      "Thanks! Your item has been added.";
   });
 }
 
@@ -367,33 +281,30 @@ const requestsList = document.getElementById("requests-list");
 
 if (requestsList) {
   function renderRequests() {
-    // Only active requests appear on this page.
     const requests = getRequests().filter(
-        request => request.status === "Requested"
+      request => request.status === "Requested"
     );
 
     saveRequests(requests);
-
     requestsList.innerHTML = "";
 
     document.getElementById("no-requests").hidden =
-        requests.length > 0;
+      requests.length > 0;
 
     requests.forEach(request => {
       const card = document.createElement("article");
-
       card.className = "request-card";
 
       card.innerHTML = `
-                <span class="request-status">Requested</span>
-                <h3>${esc(request.name)}</h3>
-                <p>Category: ${esc(request.category)}</p>
-                <p>Pickup spot: ${esc(request.pickup)}</p>
-                <p>Requested: ${esc(request.date)}</p>
-                <button class="btn cancel-request" data-request-id="${request.id}">
-                    Cancel request
-                </button>
-            `;
+        <span class="request-status">Requested</span>
+        <h3>${esc(request.name)}</h3>
+        <p>Category: ${esc(request.category)}</p>
+        <p>Pickup spot: ${esc(request.pickup)}</p>
+        <p>Requested: ${esc(request.date)}</p>
+        <button class="btn cancel-request" data-request-id="${request.id}">
+          Cancel request
+        </button>
+      `;
 
       requestsList.appendChild(card);
     });
@@ -401,30 +312,25 @@ if (requestsList) {
 
   requestsList.addEventListener("click", event => {
     const button = event.target.closest("button[data-request-id]");
-
     if (!button) return;
 
     const requestId = Number(button.dataset.requestId);
     const requests = getRequests();
-
     const request = requests.find(
-        entry => Number(entry.id) === requestId
+      entry => Number(entry.id) === requestId
     );
 
     if (!request || request.status !== "Requested") return;
 
-    // Remove the cancelled request completely from My Requests.
     saveRequests(
-        requests.filter(entry => Number(entry.id) !== requestId)
+      requests.filter(entry => Number(entry.id) !== requestId)
     );
 
     const items = getItems();
-
-    // Restore the item so another student can request it.
     const item = items.find(entry =>
-        request.itemId != null
-            ? Number(entry.id) === Number(request.itemId)
-            : entry.name === request.name
+      request.itemId != null
+        ? Number(entry.id) === Number(request.itemId)
+        : entry.name === request.name
     );
 
     if (item) {
@@ -436,4 +342,62 @@ if (requestsList) {
   });
 
   renderRequests();
+}
+
+// My Listings page
+const myListings = document.getElementById("my-listings");
+
+if (myListings) {
+  function renderMyListings() {
+    const ownItems = getItems().filter(
+      item => item.owner === CURRENT_STUDENT
+    );
+
+    myListings.innerHTML = "";
+    document.getElementById("no-listings").hidden =
+      ownItems.length > 0;
+
+    ownItems.forEach(item => {
+      const card = document.createElement("article");
+      card.className = "item";
+
+      const status = item.available ? "Available" : "Requested";
+
+      card.innerHTML = `
+        <span class="pill">${esc(item.category)}</span>
+        <h3>${esc(item.name)}</h3>
+        <p>${esc(item.condition)}</p>
+        <p>Pickup: ${esc(item.pickup)}</p>
+        <p>Meetup: ${esc(item.meetupDate)} · ${esc(item.meetupTime)}</p>
+        <p>Listed by: ${esc(item.owner)}</p>
+        <strong class="listing-status">${status}</strong>
+        ${item.available
+          ? `<button class="btn cancel-listing" data-item-id="${item.id}">Cancel listing</button>`
+          : `<p class="sub">This item has already been requested and is no longer available to cancel.</p>`}
+      `;
+
+      myListings.appendChild(card);
+    });
+  }
+
+  myListings.addEventListener("click", event => {
+    const button = event.target.closest("button[data-item-id]");
+    if (!button) return;
+
+    const itemId = Number(button.dataset.itemId);
+    const items = getItems();
+
+    const item = items.find(entry =>
+      Number(entry.id) === itemId &&
+      entry.owner === CURRENT_STUDENT
+    );
+
+    if (!item || !item.available) return;
+    if (!confirm(`Cancel your listing for "${item.name}"?`)) return;
+
+    saveItems(items.filter(entry => Number(entry.id) !== itemId));
+    renderMyListings();
+  });
+
+  renderMyListings();
 }
