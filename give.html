@@ -6,27 +6,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Campus Pantry - Give</title>
-
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- Header and navigation -->
 <header>
 
   <a class="logo" href="index.html" aria-label="Campus Pantry home">
-
-      <span class="logo-mark" aria-hidden="true">
-        <span class="logo-leaf">✦</span>
-        <span class="logo-bowl"></span>
-      </span>
+    <span class="logo-mark" aria-hidden="true">
+      <span class="logo-leaf">✦</span>
+      <span class="logo-bowl"></span>
+    </span>
 
     <span class="logo-name">
-        Campus Pantry
-        <small>PAY IT FORWARD</small>
-      </span>
-
+      Campus Pantry
+      <small>PAY IT FORWARD</small>
+    </span>
   </a>
 
   <nav>
@@ -34,17 +30,17 @@
     <a href="browse.html">Browse items</a>
     <a href="give.html" class="active">Give an item</a>
     <a href="requests.html">My Requests</a>
+    <a href="my-listings.html">My Listings</a>
   </nav>
 
-  <!-- Student profile dropdown -->
   <div class="profile-wrap">
 
     <button
-            class="profile-dot"
-            id="profile-toggle"
-            type="button"
-            aria-label="Open student account"
-            aria-expanded="false"
+      class="profile-dot"
+      id="profile-toggle"
+      type="button"
+      aria-label="Open student account"
+      aria-expanded="false"
     >
       <span class="avatar-letter">P</span>
       <i class="online-dot"></i>
@@ -67,6 +63,7 @@
       </div>
 
       <a href="requests.html">My Requests</a>
+      <a href="my-listings.html">My Listings</a>
       <a href="give.html">Share an item</a>
 
       <button type="button" id="sign-out">Sign out</button>
@@ -78,7 +75,6 @@
 
 <main class="page givepage">
 
-  <!-- Page introduction -->
   <p class="eyebrow">Pass something along</p>
 
   <h1 class="pagetitle">Share an item</h1>
@@ -87,15 +83,14 @@
     Have something in good condition that another student could use?
   </p>
 
-  <!-- Form for sharing a new item -->
   <form id="give-form">
 
     <label for="item-name">Item name</label>
     <input
-            id="item-name"
-            required
-            maxlength="50"
-            placeholder="e.g. Notebook"
+      id="item-name"
+      required
+      maxlength="50"
+      placeholder="e.g. Notebook"
     >
 
     <label for="item-category">Category</label>
@@ -109,21 +104,38 @@
 
     <label for="item-condition">Condition</label>
     <input
-            id="item-condition"
-            required
-            maxlength="100"
-            placeholder="e.g. Good condition"
+      id="item-condition"
+      required
+      maxlength="100"
+      placeholder="e.g. Good condition"
     >
 
     <label for="pickup">Campus pickup spot</label>
     <input
-            id="pickup"
-            required
-            maxlength="60"
-            placeholder="e.g. Student Centre"
+      id="pickup"
+      required
+      maxlength="60"
+      placeholder="e.g. Student Centre"
     >
 
-    <!-- Submit the new item -->
+    <label for="meetup-date">Preferred meetup date</label>
+    <input
+      id="meetup-date"
+      type="date"
+      required
+    >
+
+    <label for="meetup-time">Preferred meetup time</label>
+    <input
+      id="meetup-time"
+      type="time"
+      required
+    >
+
+    <p class="form-note">
+      Your listing will be shown under My Listings, where you can cancel it while it is available.
+    </p>
+
     <button type="submit" class="btn wide">
       Add my item
     </button>
@@ -132,14 +144,12 @@
 
   </form>
 
-  <!-- Reminder for students -->
   <p class="reminder">
     ♡ Please only share clean, safe items. Don't add your home address.
   </p>
 
 </main>
 
-<!-- JavaScript functionality -->
 <script src="script.js"></script>
 
 </body>
