@@ -1,5 +1,25 @@
 
-// Demo student account menu (no real authentication).
+const KEY = "campusPantrySimpleItems";
+const REQUESTS_KEY = "campusPantryRequests";
+const CURRENT_STUDENT = "Pratik S.";
+
+const meetingPoints = [
+  "Student Centre",
+  "Library entrance",
+  "Main lobby"
+];
+
+const meetingTimes = [
+  "09:30", "10:30", "11:30", "12:30",
+  "13:30", "14:30", "15:30", "16:30"
+];
+
+const weekdays = [
+  "Monday", "Tuesday", "Wednesday", "Thursday",
+  "Friday", "Saturday", "Sunday"
+];
+
+// Profile menu
 const profileToggle = document.getElementById("profile-toggle");
 const profileMenu = document.getElementById("profile-menu");
 
@@ -29,190 +49,40 @@ if (profileToggle && profileMenu) {
   });
 }
 
-const KEY = "campusPantrySimpleItems";
-const REQUESTS_KEY = "campusPantryRequests";
-const CURRENT_STUDENT = "Pratik S.";
-
-const meetingPoints = [
-  "Student Centre",
-  "Library entrance",
-  "Main lobby"
+// Demo listings
+const initial = [
+  { id: 1, name: "Notebook", category: "School supplies", condition: "Good condition", pickup: "Student Centre", available: true },
+  { id: 2, name: "Pasta (unopened)", category: "Food", condition: "Unopened package", pickup: "Library entrance", available: true },
+  { id: 3, name: "Winter scarf", category: "Household", condition: "Clean and gently used", pickup: "Student Centre", available: true },
+  { id: 4, name: "Travel-size shampoo", category: "Personal care", condition: "New and unopened", pickup: "Library entrance", available: true },
+  { id: 5, name: "Biology textbook", category: "School supplies", condition: "Used, readable condition", pickup: "Main lobby", available: true },
+  { id: 6, name: "Reusable water bottle", category: "Household", condition: "Clean and in good condition", pickup: "Student Centre", available: true },
+  { id: 7, name: "Instant oatmeal (unopened)", category: "Food", condition: "Unopened package", pickup: "Library entrance", available: true },
+  { id: 8, name: "Pens and highlighters", category: "School supplies", condition: "Good condition", pickup: "Main lobby", available: true },
+  { id: 9, name: "Scientific calculator", category: "School supplies", condition: "Works properly, gently used", pickup: "Student Centre", available: true },
+  { id: 10, name: "Granola bars (unopened)", category: "Food", condition: "Sealed package", pickup: "Library entrance", available: true },
+  { id: 11, name: "Reusable lunch container", category: "Household", condition: "Clean and in good condition", pickup: "Main lobby", available: true },
+  { id: 12, name: "Warm winter gloves", category: "Household", condition: "Clean and gently used", pickup: "Student Centre", available: true }
 ];
 
-const meetingTimes = [
-  "09:30",
-  "10:30",
-  "11:30",
-  "12:30",
-  "13:30",
-  "14:30",
-  "15:30",
-  "16:30"
-];
-
-const weekdays = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday"
-];
-
-function formatAvailability(days, times) {
-  const dayText = Array.isArray(days) && days.length ? days.join(", ") : "Not set";
-  const timeText = Array.isArray(times) && times.length ? times.map(formatTime).join(", ") : "Not set";
-  return `${dayText} · ${timeText}`;
+function randomChoice(list) {
+  return list[Math.floor(Math.random() * list.length)];
 }
 
 function randomAvailability() {
   const shuffledDays = [...weekdays].sort(() => Math.random() - 0.5);
   const shuffledTimes = [...meetingTimes].sort(() => Math.random() - 0.5);
+
   return {
     availableDays: shuffledDays.slice(0, 3),
     availableTimes: shuffledTimes.slice(0, 2)
   };
 }
 
-// Sample listings for Browse Items.
-const initial = [
-  {
-    id: 1,
-    name: "Notebook",
-    category: "School supplies",
-    condition: "Good condition",
-    pickup: "Student Centre",
-    available: true
-  },
-  {
-    id: 2,
-    name: "Pasta (unopened)",
-    category: "Food",
-    condition: "Unopened package",
-    pickup: "Library entrance",
-    available: true
-  },
-  {
-    id: 3,
-    name: "Winter scarf",
-    category: "Household",
-    condition: "Clean and gently used",
-    pickup: "Student Centre",
-    available: true
-  },
-  {
-    id: 4,
-    name: "Travel-size shampoo",
-    category: "Personal care",
-    condition: "New and unopened",
-    pickup: "Library entrance",
-    available: true
-  },
-  {
-    id: 5,
-    name: "Biology textbook",
-    category: "School supplies",
-    condition: "Used, readable condition",
-    pickup: "Main lobby",
-    available: true
-  },
-  {
-    id: 6,
-    name: "Reusable water bottle",
-    category: "Household",
-    condition: "Clean and in good condition",
-    pickup: "Student Centre",
-    available: true
-  },
-  {
-    id: 7,
-    name: "Instant oatmeal (unopened)",
-    category: "Food",
-    condition: "Unopened package",
-    pickup: "Library entrance",
-    available: true
-  },
-  {
-    id: 8,
-    name: "Pens and highlighters",
-    category: "School supplies",
-    condition: "Good condition",
-    pickup: "Main lobby",
-    available: true
-  },
-  {
-    id: 9,
-    name: "Scientific calculator",
-    category: "School supplies",
-    condition: "Works properly, gently used",
-    pickup: "Student Centre",
-    available: true
-  },
-  {
-    id: 10,
-    name: "Granola bars (unopened)",
-    category: "Food",
-    condition: "Sealed package",
-    pickup: "Library entrance",
-    available: true
-  },
-  {
-    id: 11,
-    name: "Reusable lunch container",
-    category: "Household",
-    condition: "Clean and in good condition",
-    pickup: "Main lobby",
-    available: true
-  },
-  {
-    id: 12,
-    name: "Warm winter gloves",
-    category: "Household",
-    condition: "Clean and gently used",
-    pickup: "Student Centre",
-    available: true
-  }
-];
-
-// Select a random value from a list.
-function randomChoice(list) {
-  return list[Math.floor(Math.random() * list.length)];
-}
-
-// Generate a dummy date between tomorrow and seven days from now.
-function randomDate() {
-  const date = new Date();
-  date.setDate(date.getDate() + Math.floor(Math.random() * 7) + 1);
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
-
-// Convert a saved date into a readable date.
-function formatDate(dateString) {
-  if (!dateString) return "Not selected";
-
-  const date = new Date(dateString + "T00:00:00");
-
-  if (Number.isNaN(date.getTime())) return dateString;
-
-  return date.toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "short",
-    day: "numeric"
-  });
-}
-
-// Convert 24-hour time into AM/PM format.
 function formatTime(timeString) {
   if (!timeString) return "Not selected";
 
   const parts = timeString.split(":");
-
   if (parts.length !== 2) return timeString;
 
   let hour = Number(parts[0]);
@@ -224,19 +94,45 @@ function formatTime(timeString) {
   return `${hour}:${minute} ${period}`;
 }
 
-// One-time migration key for old demo listings.
-// Changing this value forces the demo listings to receive fresh dummy meetup details once.
-const DEMO_MEETUP_MIGRATION_KEY = "campusPantryOwnerAvailabilityMigration_v4";
+function formatAvailability(days, times) {
+  const dayText = Array.isArray(days) && days.length
+    ? days.join(", ")
+    : "Not set";
 
-// Get and prepare all listings.
+  const timeText = Array.isArray(times) && times.length
+    ? times.map(formatTime).join(", ")
+    : "Not set";
+
+  return `${dayText} · ${timeText}`;
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[c]));
+}
+
+// Save and load listings
+function saveItems(items) {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(items));
+  } catch (error) {
+    console.error("Could not save listings:", error);
+  }
+}
+
+const DEMO_MEETUP_MIGRATION_KEY =
+  "campusPantryOwnerAvailabilityMigration_v4";
+
 function getItems() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY));
-
-    // Use saved listings when available; otherwise start with the demo listings.
     const source = Array.isArray(saved) ? saved : initial;
 
-    // Restore any sample listings that are missing from browser storage.
     const missing = initial.filter(seed =>
       !source.some(item => Number(item.id) === Number(seed.id))
     );
@@ -245,51 +141,54 @@ function getItems() {
       localStorage.getItem(DEMO_MEETUP_MIGRATION_KEY) !== "done";
 
     const merged = [...source, ...missing].map(item => {
-      const sample = initial.find(seed => Number(seed.id) === Number(item.id));
+      const sample = initial.find(seed =>
+        Number(seed.id) === Number(item.id)
+      );
+
       const isSample = Boolean(sample);
-      const validPickup = meetingPoints.includes(item.pickup);
-      const shouldRefreshSampleMeetup = migrationNeeded && isSample;
+      const shouldRefresh = migrationNeeded && isSample;
 
-      let availableDays = Array.isArray(item.availableDays) ? item.availableDays : [];
-      let availableTimes = Array.isArray(item.availableTimes) ? item.availableTimes : [];
+      let availableDays = Array.isArray(item.availableDays)
+        ? item.availableDays : [];
 
-      // Convert old demo date/time data into weekday/time availability.
-      if (shouldRefreshSampleMeetup || !availableDays.length || !availableTimes.length) {
+      let availableTimes = Array.isArray(item.availableTimes)
+        ? item.availableTimes : [];
+
+      if (shouldRefresh || !availableDays.length || !availableTimes.length) {
         if (isSample) {
           const generated = randomAvailability();
           availableDays = generated.availableDays;
           availableTimes = generated.availableTimes;
         } else {
           if (!availableDays.length) {
-            const oldDate = item.meetupDate && !String(item.meetupDate).toLowerCase().includes("arrange")
-              ? new Date(item.meetupDate + "T00:00:00") : null;
-            const oldDay = oldDate && !Number.isNaN(oldDate.getTime())
-              ? ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][oldDate.getDay()]
-              : weekdays.slice(0, 3);
-            availableDays = Array.isArray(oldDay) ? oldDay : [oldDay];
+            availableDays = weekdays.slice(0, 3);
           }
 
           if (!availableTimes.length) {
-            const oldTime = item.meetupTime && meetingTimes.includes(item.meetupTime)
-              ? [item.meetupTime] : [randomChoice(meetingTimes)];
-            availableTimes = oldTime;
+            availableTimes = [randomChoice(meetingTimes)];
           }
         }
       }
 
       return {
         ...item,
-        owner: item.owner || (isSample ? "Campus Pantry Student" : CURRENT_STUDENT),
-        pickup: validPickup ? item.pickup : randomChoice(meetingPoints),
-        availableDays: availableDays.filter(day => weekdays.includes(day)),
-        availableTimes: availableTimes.filter(time => meetingTimes.includes(time))
+        owner: item.owner || (isSample
+          ? "Campus Pantry Student"
+          : CURRENT_STUDENT),
+        pickup: meetingPoints.includes(item.pickup)
+          ? item.pickup
+          : randomChoice(meetingPoints),
+        availableDays: availableDays.filter(day =>
+          weekdays.includes(day)
+        ),
+        availableTimes: availableTimes.filter(time =>
+          meetingTimes.includes(time)
+        )
       };
     });
 
-    // Save the generated details so they remain consistent after refresh.
     saveItems(merged);
 
-    // Mark migration complete only after saving the updated listings.
     if (migrationNeeded) {
       localStorage.setItem(DEMO_MEETUP_MIGRATION_KEY, "done");
     }
@@ -302,16 +201,7 @@ function getItems() {
   }
 }
 
-// Save listings.
-function saveItems(items) {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(items));
-  } catch (error) {
-    console.error("Could not save listings:", error);
-  }
-}
-
-// Get requests.
+// Save and load requests
 function getRequests() {
   try {
     const value = JSON.parse(localStorage.getItem(REQUESTS_KEY));
@@ -321,7 +211,6 @@ function getRequests() {
   }
 }
 
-// Save requests.
 function saveRequests(requests) {
   try {
     localStorage.setItem(REQUESTS_KEY, JSON.stringify(requests));
@@ -330,18 +219,7 @@ function saveRequests(requests) {
   }
 }
 
-// Escape user-entered text before displaying it.
-function esc(s) {
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  }[c]));
-}
-
-// Browse Items page.
+// Browse Items page
 const grid = document.getElementById("item-grid");
 
 if (grid) {
@@ -353,11 +231,9 @@ if (grid) {
   const modal = document.getElementById("modal");
   const requestFeedback = document.getElementById("request-feedback");
   const requestButton = document.getElementById("request-button");
-
   const payItForwardMessage =
     document.getElementById("pay-it-forward-message");
 
-  // Display available listings.
   function render() {
     const term = search.value.toLowerCase().trim();
 
@@ -374,39 +250,25 @@ if (grid) {
 
     shown.forEach(item => {
       const card = document.createElement("article");
-
       card.className = "item";
 
       card.innerHTML = `
         <span class="pill">${esc(item.category)}</span>
         <h3>${esc(item.name)}</h3>
         <p>${esc(item.condition)}</p>
-
-        <small>
-          Listed by: ${esc(item.owner)}
-        </small>
-
-        <small>
-          Meeting point: ${esc(item.pickup)}
-        </small>
-
-        <small>
-          Meetup: ${esc(formatAvailability(item.availableDays, item.availableTimes))}
-        </small>
-
-        <button class="btn" data-id="${item.id}">
-          View details
-        </button>
+        <small>Listed by: ${esc(item.owner)}</small>
+        <small>Meeting point: ${esc(item.pickup)}</small>
+        <small>Meetup: ${esc(formatAvailability(item.availableDays, item.availableTimes))}</small>
+        <button class="btn" data-id="${item.id}">View details</button>
       `;
 
       grid.appendChild(card);
     });
   }
 
-  // Open item details.
+  // Open item details
   grid.addEventListener("click", event => {
     const button = event.target.closest("button[data-id]");
-
     if (!button) return;
 
     const item = items.find(entry =>
@@ -420,24 +282,22 @@ if (grid) {
     document.getElementById("modal-title").textContent = item.name;
     document.getElementById("modal-category").textContent = item.category;
     document.getElementById("modal-condition").textContent = item.condition;
-
     document.getElementById("modal-pickup").textContent = item.pickup;
-
-    document.getElementById("modal-owner").textContent =
-      item.owner || "Campus Pantry Student";
-
+    document.getElementById("modal-owner").textContent = item.owner;
     document.getElementById("modal-meetup").textContent =
       formatAvailability(item.availableDays, item.availableTimes);
 
     const requestDay = document.getElementById("request-day");
     const requestTime = document.getElementById("request-time");
 
-    requestDay.innerHTML = '<option value="">Choose an available day</option>' +
+    requestDay.innerHTML =
+      '<option value="">Choose an available day</option>' +
       (item.availableDays || []).map(day =>
         `<option value="${esc(day)}">${esc(day)}</option>`
       ).join("");
 
-    requestTime.innerHTML = '<option value="">Choose an available time</option>' +
+    requestTime.innerHTML =
+      '<option value="">Choose an available time</option>' +
       (item.availableTimes || []).map(time =>
         `<option value="${esc(time)}">${esc(formatTime(time))}</option>`
       ).join("");
@@ -457,7 +317,7 @@ if (grid) {
     modal.hidden = false;
   });
 
-  // Request an item.
+  // Submit an item request
   requestButton.addEventListener("click", () => {
     const item = items.find(entry =>
       Number(entry.id) === Number(selected)
@@ -470,7 +330,7 @@ if (grid) {
 
     if (!selectedDay || !selectedTime) {
       requestFeedback.textContent =
-        "Please choose one of the owner's available days and times.";
+        "Please choose an available day and time.";
       return;
     }
 
@@ -482,7 +342,6 @@ if (grid) {
     }
 
     item.available = false;
-
     saveItems(items);
 
     const requests = getRequests();
@@ -502,11 +361,10 @@ if (grid) {
     });
 
     saveRequests(requests);
-
     render();
 
-    requestFeedback.textContent =
-      "Your request has been saved. You can see it on the My Requests page.";
+    // Short confirmation message
+    requestFeedback.textContent = "Request submitted successfully!";
 
     if (payItForwardMessage) {
       payItForwardMessage.hidden = false;
@@ -516,7 +374,6 @@ if (grid) {
     requestButton.disabled = true;
   });
 
-  // Close item details.
   function closeModal() {
     modal.hidden = true;
   }
@@ -525,15 +382,11 @@ if (grid) {
     .addEventListener("click", closeModal);
 
   modal.addEventListener("click", event => {
-    if (event.target.id === "modal") {
-      closeModal();
-    }
+    if (event.target.id === "modal") closeModal();
   });
 
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape") {
-      closeModal();
-    }
+    if (event.key === "Escape") closeModal();
   });
 
   search.addEventListener("input", render);
@@ -542,7 +395,7 @@ if (grid) {
   render();
 }
 
-// Give an Item page.
+// Give an Item page
 const form = document.getElementById("give-form");
 
 if (form) {
@@ -554,28 +407,26 @@ if (form) {
     const name = document.getElementById("item-name").value.trim();
     const category = document.getElementById("item-category").value;
     const condition = document.getElementById("item-condition").value.trim();
-
-    // The selected campus meeting point is saved as pickup.
     const pickup = document.getElementById("pickup").value;
 
     const availableDays = [
-      ...document.querySelectorAll('input[name="available-days"]:checked')
+      ...document.querySelectorAll(
+        'input[name="available-days"]:checked'
+      )
     ].map(input => input.value);
 
     const availableTimes = [
-      ...document.querySelectorAll('input[name="available-times"]:checked')
+      ...document.querySelectorAll(
+        'input[name="available-times"]:checked'
+      )
     ].map(input => input.value);
 
     if (
-      !name ||
-      !category ||
-      !condition ||
-      !pickup ||
-      !availableDays.length ||
-      !availableTimes.length
+      !name || !category || !condition || !pickup ||
+      !availableDays.length || !availableTimes.length
     ) {
       document.getElementById("give-feedback").textContent =
-        "Please choose at least one available day and one available time.";
+        "Please choose at least one available day and time.";
       return;
     }
 
@@ -593,7 +444,6 @@ if (form) {
     });
 
     saveItems(items);
-
     form.reset();
 
     document.getElementById("give-feedback").textContent =
@@ -601,7 +451,7 @@ if (form) {
   });
 }
 
-// My Requests page.
+// My Requests page
 const requestsList = document.getElementById("requests-list");
 
 if (requestsList) {
@@ -611,7 +461,6 @@ if (requestsList) {
     );
 
     saveRequests(requests);
-
     requestsList.innerHTML = "";
 
     document.getElementById("no-requests").hidden =
@@ -619,31 +468,17 @@ if (requestsList) {
 
     requests.forEach(request => {
       const card = document.createElement("article");
-
       card.className = "request-card";
 
       card.innerHTML = `
         <span class="request-status">Requested</span>
-
         <h3>${esc(request.name)}</h3>
-
         <p>Category: ${esc(request.category)}</p>
-
         <p>Listed by: ${esc(request.owner || "Campus Pantry Student")}</p>
-
         <p>Meeting point: ${esc(request.pickup)}</p>
-
-        <p>
-          Meetup:
-          ${esc(request.meetupDay || "Not selected")}
-          · ${esc(formatTime(request.meetupTime))}
-        </p>
-
+        <p>Meetup: ${esc(request.meetupDay || "Not selected")} · ${esc(formatTime(request.meetupTime))}</p>
         <p>Requested: ${esc(request.date)}</p>
-
-        <button
-          class="btn cancel-request"
-          data-request-id="${request.id}">
+        <button class="btn cancel-request" data-request-id="${request.id}">
           Cancel request
         </button>
       `;
@@ -652,17 +487,15 @@ if (requestsList) {
     });
   }
 
-  // Cancel a request.
   requestsList.addEventListener("click", event => {
     const button = event.target.closest("button[data-request-id]");
-
     if (!button) return;
 
     const requestId = Number(button.dataset.requestId);
     const requests = getRequests();
 
-    const request = requests.find(
-      entry => Number(entry.id) === requestId
+    const request = requests.find(entry =>
+      Number(entry.id) === requestId
     );
 
     if (!request || request.status !== "Requested") return;
@@ -671,7 +504,6 @@ if (requestsList) {
       requests.filter(entry => Number(entry.id) !== requestId)
     );
 
-    // Make the item available again.
     const items = getItems();
 
     const item = items.find(entry =>
@@ -691,7 +523,7 @@ if (requestsList) {
   renderRequests();
 }
 
-// My Listings page.
+// My Listings page
 const myListings = document.getElementById("my-listings");
 
 if (myListings) {
@@ -707,37 +539,22 @@ if (myListings) {
 
     ownItems.forEach(item => {
       const card = document.createElement("article");
-
       card.className = "item";
 
       const status = item.available ? "Available" : "Requested";
 
       card.innerHTML = `
         <span class="pill">${esc(item.category)}</span>
-
         <h3>${esc(item.name)}</h3>
-
         <p>${esc(item.condition)}</p>
-
         <p>Meeting point: ${esc(item.pickup)}</p>
-
-        <p>
-          Meetup:
-          ${esc(formatAvailability(item.availableDays, item.availableTimes))}
-        </p>
-
+        <p>Meetup: ${esc(formatAvailability(item.availableDays, item.availableTimes))}</p>
         <p>Listed by: ${esc(item.owner)}</p>
-
         <strong class="listing-status">${status}</strong>
-
         ${
           item.available
-            ? `<button class="btn cancel-listing" data-item-id="${item.id}">
-                 Cancel listing
-               </button>`
-            : `<p class="sub">
-                 This item has already been requested and is no longer available to cancel.
-               </p>`
+            ? `<button class="btn cancel-listing" data-item-id="${item.id}">Cancel listing</button>`
+            : `<p class="sub">This item has already been requested.</p>`
         }
       `;
 
@@ -745,10 +562,8 @@ if (myListings) {
     });
   }
 
-  // Cancel one of your own available listings.
   myListings.addEventListener("click", event => {
     const button = event.target.closest("button[data-item-id]");
-
     if (!button) return;
 
     const itemId = Number(button.dataset.itemId);
