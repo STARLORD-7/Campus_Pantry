@@ -12,7 +12,6 @@
 <body>
 
 <header>
-
   <a class="logo" href="index.html" aria-label="Campus Pantry home">
     <span class="logo-mark" aria-hidden="true">
       <span class="logo-leaf">✦</span>
@@ -34,7 +33,6 @@
   </nav>
 
   <div class="profile-wrap">
-
     <button
       class="profile-dot"
       id="profile-toggle"
@@ -47,10 +45,8 @@
     </button>
 
     <div class="profile-menu" id="profile-menu" hidden>
-
       <div class="profile-heading">
         <span class="profile-avatar">P</span>
-
         <div>
           <strong>Pratik S.</strong>
           <small>Student account</small>
@@ -67,16 +63,13 @@
       <a href="give.html">Share an item</a>
 
       <button type="button" id="sign-out">Sign out</button>
-
     </div>
   </div>
-
 </header>
 
 <main class="page">
 
   <p class="eyebrow">Find something useful</p>
-
   <h1 class="pagetitle">Available items</h1>
 
   <p class="sub">
@@ -84,7 +77,6 @@
   </p>
 
   <div class="tools">
-
     <input
       id="search"
       placeholder="Search items..."
@@ -98,7 +90,6 @@
       <option>Personal care</option>
       <option>Household</option>
     </select>
-
   </div>
 
   <div id="item-grid" class="items"></div>
@@ -109,6 +100,7 @@
 
 </main>
 
+<!-- Item details and request popup -->
 <div id="modal" class="shade" hidden>
 
   <section class="dialog">
@@ -124,7 +116,7 @@
     <p id="modal-condition"></p>
 
     <p>
-      <b>Pickup spot:</b>
+      <b>Meeting point:</b>
       <span id="modal-pickup"></span>
     </p>
 
@@ -134,22 +126,45 @@
     </p>
 
     <p>
-      <b>Meetup:</b>
+      <b>Owner availability:</b>
       <span id="modal-meetup"></span>
     </p>
+
+    <div class="availability-selection">
+
+      <label for="request-day">
+        Choose an available day
+      </label>
+
+      <select id="request-day" required>
+        <option value="">Choose an available day</option>
+      </select>
+
+      <label for="request-time">
+        Choose an available time
+      </label>
+
+      <select id="request-time" required>
+        <option value="">Choose an available time</option>
+      </select>
+
+    </div>
 
     <button id="request-button" class="btn wide" type="button">
       Request item
     </button>
 
-    <p id="request-feedback" class="feedback" aria-live="polite"></p>
+    <p
+      id="request-feedback"
+      class="feedback"
+      aria-live="polite"
+    ></p>
 
     <div
       id="pay-it-forward-message"
       class="pay-it-forward-message"
       hidden
     >
-
       <h3>Keep Kindness Moving! 💚</h3>
 
       <p>
@@ -165,7 +180,6 @@
       <strong>
         Give what you can. Take what you need. Keep kindness moving.
       </strong>
-
     </div>
 
   </section>
