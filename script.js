@@ -1,5 +1,5 @@
 
-// Demo student account menu (the prototype does not use real authentication).
+// Demo student account menu (no real authentication).
 const profileToggle = document.getElementById("profile-toggle");
 const profileMenu = document.getElementById("profile-menu");
 
@@ -20,8 +20,10 @@ if (profileToggle && profileMenu) {
   document.getElementById("sign-out")?.addEventListener("click", () => {
     profileMenu.querySelector(".login-status").innerHTML =
       "<span></span> Signed out (demo)";
+
     profileMenu.querySelector(".profile-heading small").textContent =
       "Guest account";
+
     profileToggle.querySelector(".avatar-letter").textContent = "G";
     profileToggle.querySelector(".online-dot").style.background = "#aaa";
   });
@@ -31,61 +33,243 @@ const KEY = "campusPantrySimpleItems";
 const REQUESTS_KEY = "campusPantryRequests";
 const CURRENT_STUDENT = "Pratik S.";
 
-// Sample listings for the Browse page.
-const initial = [
-  { id: 1, name: "Notebook", category: "School supplies", condition: "Good condition", pickup: "Student Centre", available: true },
-  { id: 2, name: "Pasta (unopened)", category: "Food", condition: "Unopened package", pickup: "Library entrance", available: true },
-  { id: 3, name: "Winter scarf", category: "Household", condition: "Clean and gently used", pickup: "Student Centre", available: true },
-  { id: 4, name: "Travel-size shampoo", category: "Personal care", condition: "New and unopened", pickup: "Library entrance", available: true },
-  { id: 5, name: "Biology textbook", category: "School supplies", condition: "Used, readable condition", pickup: "Main lobby", available: true },
-  { id: 6, name: "Reusable water bottle", category: "Household", condition: "Clean and in good condition", pickup: "Student Centre", available: true },
-  { id: 7, name: "Instant oatmeal (unopened)", category: "Food", condition: "Unopened package", pickup: "Library entrance", available: true },
-  { id: 8, name: "Pens and highlighters", category: "School supplies", condition: "Good condition", pickup: "Main lobby", available: true },
-  { id: 9, name: "Scientific calculator", category: "School supplies", condition: "Works properly, gently used", pickup: "Student Centre", available: true },
-  { id: 10, name: "Granola bars (unopened)", category: "Food", condition: "Sealed package", pickup: "Library entrance", available: true },
-  { id: 11, name: "Reusable lunch container", category: "Household", condition: "Clean and in good condition", pickup: "Main lobby", available: true },
-  { id: 12, name: "Warm winter gloves", category: "Household", condition: "Clean and gently used", pickup: "Student Centre", available: true }
+const meetingPoints = [
+  "Student Centre",
+  "Library entrance",
+  "Main lobby"
 ];
 
+const meetingTimes = [
+  "09:30",
+  "10:30",
+  "11:30",
+  "12:30",
+  "13:30",
+  "14:30",
+  "15:30",
+  "16:30"
+];
+
+// Sample listings for Browse Items.
+const initial = [
+  {
+    id: 1,
+    name: "Notebook",
+    category: "School supplies",
+    condition: "Good condition",
+    pickup: "Student Centre",
+    available: true
+  },
+  {
+    id: 2,
+    name: "Pasta (unopened)",
+    category: "Food",
+    condition: "Unopened package",
+    pickup: "Library entrance",
+    available: true
+  },
+  {
+    id: 3,
+    name: "Winter scarf",
+    category: "Household",
+    condition: "Clean and gently used",
+    pickup: "Student Centre",
+    available: true
+  },
+  {
+    id: 4,
+    name: "Travel-size shampoo",
+    category: "Personal care",
+    condition: "New and unopened",
+    pickup: "Library entrance",
+    available: true
+  },
+  {
+    id: 5,
+    name: "Biology textbook",
+    category: "School supplies",
+    condition: "Used, readable condition",
+    pickup: "Main lobby",
+    available: true
+  },
+  {
+    id: 6,
+    name: "Reusable water bottle",
+    category: "Household",
+    condition: "Clean and in good condition",
+    pickup: "Student Centre",
+    available: true
+  },
+  {
+    id: 7,
+    name: "Instant oatmeal (unopened)",
+    category: "Food",
+    condition: "Unopened package",
+    pickup: "Library entrance",
+    available: true
+  },
+  {
+    id: 8,
+    name: "Pens and highlighters",
+    category: "School supplies",
+    condition: "Good condition",
+    pickup: "Main lobby",
+    available: true
+  },
+  {
+    id: 9,
+    name: "Scientific calculator",
+    category: "School supplies",
+    condition: "Works properly, gently used",
+    pickup: "Student Centre",
+    available: true
+  },
+  {
+    id: 10,
+    name: "Granola bars (unopened)",
+    category: "Food",
+    condition: "Sealed package",
+    pickup: "Library entrance",
+    available: true
+  },
+  {
+    id: 11,
+    name: "Reusable lunch container",
+    category: "Household",
+    condition: "Clean and in good condition",
+    pickup: "Main lobby",
+    available: true
+  },
+  {
+    id: 12,
+    name: "Warm winter gloves",
+    category: "Household",
+    condition: "Clean and gently used",
+    pickup: "Student Centre",
+    available: true
+  }
+];
+
+// Select a random value from a list.
+function randomChoice(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+// Generate a dummy date between tomorrow and seven days from now.
+function randomDate() {
+  const date = new Date();
+  date.setDate(date.getDate() + Math.floor(Math.random() * 7) + 1);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+// Convert a saved date into a readable date.
+function formatDate(dateString) {
+  if (!dateString) return "Not selected";
+
+  const date = new Date(dateString + "T00:00:00");
+
+  if (Number.isNaN(date.getTime())) return dateString;
+
+  return date.toLocaleDateString("en-CA", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+}
+
+// Convert 24-hour time into AM/PM format.
+function formatTime(timeString) {
+  if (!timeString) return "Not selected";
+
+  const parts = timeString.split(":");
+
+  if (parts.length !== 2) return timeString;
+
+  let hour = Number(parts[0]);
+  const minute = parts[1];
+  const period = hour >= 12 ? "PM" : "AM";
+
+  hour = hour % 12 || 12;
+
+  return `${hour}:${minute} ${period}`;
+}
+
+// Get and prepare all listings.
 function getItems() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY));
+
     if (!Array.isArray(saved)) return initial;
 
     const missing = initial.filter(seed =>
       !saved.some(item => Number(item.id) === seed.id)
     );
 
-    const merged = [...saved, ...missing].map(item => ({
-      ...item,
-      owner: item.owner || (
-        initial.some(seed => Number(seed.id) === Number(item.id))
-          ? "Campus Pantry Student" : CURRENT_STUDENT
-      ),
-      meetupDate: item.meetupDate || "Arrange after request",
-      meetupTime: item.meetupTime || "Contact the listing owner"
-    }));
+    const merged = [...saved, ...missing].map(item => {
+      const isSample = initial.some(
+        seed => Number(seed.id) === Number(item.id)
+      );
 
-    if (missing.length || merged.some((item, i) =>
-      item.owner !== saved[i]?.owner ||
-      item.meetupDate !== saved[i]?.meetupDate ||
-      item.meetupTime !== saved[i]?.meetupTime
-    )) {
-      saveItems(merged);
-    }
+      const oldDate =
+        !item.meetupDate ||
+        item.meetupDate === "Arrange after request";
+
+      const oldTime =
+        !item.meetupTime ||
+        item.meetupTime === "Contact the listing owner";
+
+      const oldPickup =
+        !item.pickup ||
+        !meetingPoints.includes(item.pickup);
+
+      return {
+        ...item,
+
+        owner: item.owner ||
+          (isSample ? "Campus Pantry Student" : CURRENT_STUDENT),
+
+        // Keep the existing campus meeting point.
+        // Assign a random campus point only if one is missing.
+        pickup: oldPickup
+          ? randomChoice(meetingPoints)
+          : item.pickup,
+
+        // Give old sample listings realistic demo dates and times.
+        meetupDate: oldDate
+          ? randomDate()
+          : item.meetupDate,
+
+        meetupTime: oldTime
+          ? randomChoice(meetingTimes)
+          : item.meetupTime
+      };
+    });
+
+    // Save the generated details so they stay the same after refresh.
+    saveItems(merged);
 
     return merged;
+
   } catch {
     return initial;
   }
 }
 
+// Save listings.
 function saveItems(items) {
   try {
     localStorage.setItem(KEY, JSON.stringify(items));
-  } catch {}
+  } catch (error) {
+    console.error("Could not save listings:", error);
+  }
 }
 
+// Get requests.
 function getRequests() {
   try {
     const value = JSON.parse(localStorage.getItem(REQUESTS_KEY));
@@ -95,13 +279,16 @@ function getRequests() {
   }
 }
 
+// Save requests.
 function saveRequests(requests) {
   try {
     localStorage.setItem(REQUESTS_KEY, JSON.stringify(requests));
-  } catch {}
+  } catch (error) {
+    console.error("Could not save requests:", error);
+  }
 }
 
-// Escape user-entered text before displaying it in HTML.
+// Escape user-entered text before displaying it.
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({
     "&": "&amp;",
@@ -112,7 +299,7 @@ function esc(s) {
   }[c]));
 }
 
-// Browse page
+// Browse Items page.
 const grid = document.getElementById("item-grid");
 
 if (grid) {
@@ -124,9 +311,11 @@ if (grid) {
   const modal = document.getElementById("modal");
   const requestFeedback = document.getElementById("request-feedback");
   const requestButton = document.getElementById("request-button");
+
   const payItForwardMessage =
     document.getElementById("pay-it-forward-message");
 
+  // Display available listings.
   function render() {
     const term = search.value.toLowerCase().trim();
 
@@ -137,33 +326,52 @@ if (grid) {
     );
 
     grid.innerHTML = "";
-    document.getElementById("empty-message").hidden = shown.length > 0;
+
+    document.getElementById("empty-message").hidden =
+      shown.length > 0;
 
     shown.forEach(item => {
       const card = document.createElement("article");
+
       card.className = "item";
 
       card.innerHTML = `
         <span class="pill">${esc(item.category)}</span>
         <h3>${esc(item.name)}</h3>
         <p>${esc(item.condition)}</p>
-        <small>Listed by: ${esc(item.owner || "Campus Pantry Student")}</small>
-        <small>Pickup: ${esc(item.pickup)}</small>
-        <small>Meetup: ${esc(item.meetupDate || "Arrange after request")} · ${esc(item.meetupTime || "Contact listing owner")}</small>
-        <button class="btn" data-id="${item.id}">View details</button>
+
+        <small>
+          Listed by: ${esc(item.owner)}
+        </small>
+
+        <small>
+          Meeting point: ${esc(item.pickup)}
+        </small>
+
+        <small>
+          Meetup: ${esc(formatDate(item.meetupDate))}
+          · ${esc(formatTime(item.meetupTime))}
+        </small>
+
+        <button class="btn" data-id="${item.id}">
+          View details
+        </button>
       `;
 
       grid.appendChild(card);
     });
   }
 
+  // Open item details.
   grid.addEventListener("click", event => {
     const button = event.target.closest("button[data-id]");
+
     if (!button) return;
 
     const item = items.find(entry =>
-      entry.id === Number(button.dataset.id)
+      Number(entry.id) === Number(button.dataset.id)
     );
+
     if (!item) return;
 
     selected = item.id;
@@ -171,28 +379,41 @@ if (grid) {
     document.getElementById("modal-title").textContent = item.name;
     document.getElementById("modal-category").textContent = item.category;
     document.getElementById("modal-condition").textContent = item.condition;
+
     document.getElementById("modal-pickup").textContent = item.pickup;
+
     document.getElementById("modal-owner").textContent =
       item.owner || "Campus Pantry Student";
+
     document.getElementById("modal-meetup").textContent =
-      `${item.meetupDate || "Arrange after request"} · ${item.meetupTime || "Contact listing owner"}`;
+      `${formatDate(item.meetupDate)} · ${formatTime(item.meetupTime)}`;
 
     requestFeedback.textContent = "";
-    if (payItForwardMessage) payItForwardMessage.hidden = true;
+
+    if (payItForwardMessage) {
+      payItForwardMessage.hidden = true;
+    }
 
     requestButton.disabled = false;
     requestButton.textContent = "Request item";
+
     modal.hidden = false;
   });
 
+  // Request an item.
   requestButton.addEventListener("click", () => {
-    const item = items.find(entry => entry.id === selected);
+    const item = items.find(entry =>
+      Number(entry.id) === Number(selected)
+    );
+
     if (!item || !item.available) return;
 
     item.available = false;
+
     saveItems(items);
 
     const requests = getRequests();
+
     requests.unshift({
       id: Date.now(),
       itemId: item.id,
@@ -200,45 +421,55 @@ if (grid) {
       category: item.category,
       condition: item.condition,
       pickup: item.pickup,
-      owner: item.owner || "Campus Pantry Student",
-      meetupDate: item.meetupDate || "Arrange after request",
-      meetupTime: item.meetupTime || "Contact listing owner",
+      owner: item.owner,
+      meetupDate: item.meetupDate,
+      meetupTime: item.meetupTime,
       date: new Date().toLocaleString(),
       status: "Requested"
     });
 
     saveRequests(requests);
+
     render();
 
     requestFeedback.textContent =
       "Your request has been saved. You can see it on the My Requests page.";
 
-    if (payItForwardMessage) payItForwardMessage.hidden = false;
+    if (payItForwardMessage) {
+      payItForwardMessage.hidden = false;
+    }
 
     requestButton.textContent = "Requested";
     requestButton.disabled = true;
   });
 
+  // Close item details.
   function closeModal() {
     modal.hidden = true;
   }
 
-  document.getElementById("close-modal").addEventListener("click", closeModal);
+  document.getElementById("close-modal")
+    .addEventListener("click", closeModal);
 
   modal.addEventListener("click", event => {
-    if (event.target.id === "modal") closeModal();
+    if (event.target.id === "modal") {
+      closeModal();
+    }
   });
 
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closeModal();
+    if (event.key === "Escape") {
+      closeModal();
+    }
   });
 
   search.addEventListener("input", render);
   category.addEventListener("change", render);
+
   render();
 }
 
-// Give an item page
+// Give an Item page.
 const form = document.getElementById("give-form");
 
 if (form) {
@@ -246,14 +477,27 @@ if (form) {
     event.preventDefault();
 
     const items = getItems();
+
     const name = document.getElementById("item-name").value.trim();
     const category = document.getElementById("item-category").value;
     const condition = document.getElementById("item-condition").value.trim();
-    const pickup = document.getElementById("pickup").value.trim();
+
+    // The selected campus meeting point is saved as pickup.
+    const pickup = document.getElementById("pickup").value;
+
     const meetupDate = document.getElementById("meetup-date").value;
     const meetupTime = document.getElementById("meetup-time").value;
 
-    if (!name || !category || !condition || !pickup || !meetupDate || !meetupTime) return;
+    if (
+      !name ||
+      !category ||
+      !condition ||
+      !pickup ||
+      !meetupDate ||
+      !meetupTime
+    ) {
+      return;
+    }
 
     items.unshift({
       id: Date.now(),
@@ -269,6 +513,7 @@ if (form) {
     });
 
     saveItems(items);
+
     form.reset();
 
     document.getElementById("give-feedback").textContent =
@@ -276,7 +521,7 @@ if (form) {
   });
 }
 
-// My Requests page
+// My Requests page.
 const requestsList = document.getElementById("requests-list");
 
 if (requestsList) {
@@ -286,6 +531,7 @@ if (requestsList) {
     );
 
     saveRequests(requests);
+
     requestsList.innerHTML = "";
 
     document.getElementById("no-requests").hidden =
@@ -293,15 +539,29 @@ if (requestsList) {
 
     requests.forEach(request => {
       const card = document.createElement("article");
+
       card.className = "request-card";
 
       card.innerHTML = `
         <span class="request-status">Requested</span>
+
         <h3>${esc(request.name)}</h3>
+
         <p>Category: ${esc(request.category)}</p>
-        <p>Pickup spot: ${esc(request.pickup)}</p>
+
+        <p>Meeting point: ${esc(request.pickup)}</p>
+
+        <p>
+          Meetup:
+          ${esc(formatDate(request.meetupDate))}
+          · ${esc(formatTime(request.meetupTime))}
+        </p>
+
         <p>Requested: ${esc(request.date)}</p>
-        <button class="btn cancel-request" data-request-id="${request.id}">
+
+        <button
+          class="btn cancel-request"
+          data-request-id="${request.id}">
           Cancel request
         </button>
       `;
@@ -310,12 +570,15 @@ if (requestsList) {
     });
   }
 
+  // Cancel a request.
   requestsList.addEventListener("click", event => {
     const button = event.target.closest("button[data-request-id]");
+
     if (!button) return;
 
     const requestId = Number(button.dataset.requestId);
     const requests = getRequests();
+
     const request = requests.find(
       entry => Number(entry.id) === requestId
     );
@@ -326,7 +589,9 @@ if (requestsList) {
       requests.filter(entry => Number(entry.id) !== requestId)
     );
 
+    // Make the item available again.
     const items = getItems();
+
     const item = items.find(entry =>
       request.itemId != null
         ? Number(entry.id) === Number(request.itemId)
@@ -344,7 +609,7 @@ if (requestsList) {
   renderRequests();
 }
 
-// My Listings page
+// My Listings page.
 const myListings = document.getElementById("my-listings");
 
 if (myListings) {
@@ -354,34 +619,55 @@ if (myListings) {
     );
 
     myListings.innerHTML = "";
+
     document.getElementById("no-listings").hidden =
       ownItems.length > 0;
 
     ownItems.forEach(item => {
       const card = document.createElement("article");
+
       card.className = "item";
 
       const status = item.available ? "Available" : "Requested";
 
       card.innerHTML = `
         <span class="pill">${esc(item.category)}</span>
+
         <h3>${esc(item.name)}</h3>
+
         <p>${esc(item.condition)}</p>
-        <p>Pickup: ${esc(item.pickup)}</p>
-        <p>Meetup: ${esc(item.meetupDate)} · ${esc(item.meetupTime)}</p>
+
+        <p>Meeting point: ${esc(item.pickup)}</p>
+
+        <p>
+          Meetup:
+          ${esc(formatDate(item.meetupDate))}
+          · ${esc(formatTime(item.meetupTime))}
+        </p>
+
         <p>Listed by: ${esc(item.owner)}</p>
+
         <strong class="listing-status">${status}</strong>
-        ${item.available
-          ? `<button class="btn cancel-listing" data-item-id="${item.id}">Cancel listing</button>`
-          : `<p class="sub">This item has already been requested and is no longer available to cancel.</p>`}
+
+        ${
+          item.available
+            ? `<button class="btn cancel-listing" data-item-id="${item.id}">
+                 Cancel listing
+               </button>`
+            : `<p class="sub">
+                 This item has already been requested and is no longer available to cancel.
+               </p>`
+        }
       `;
 
       myListings.appendChild(card);
     });
   }
 
+  // Cancel one of your own available listings.
   myListings.addEventListener("click", event => {
     const button = event.target.closest("button[data-item-id]");
+
     if (!button) return;
 
     const itemId = Number(button.dataset.itemId);
@@ -393,9 +679,15 @@ if (myListings) {
     );
 
     if (!item || !item.available) return;
-    if (!confirm(`Cancel your listing for "${item.name}"?`)) return;
 
-    saveItems(items.filter(entry => Number(entry.id) !== itemId));
+    if (!confirm(`Cancel your listing for "${item.name}"?`)) {
+      return;
+    }
+
+    saveItems(
+      items.filter(entry => Number(entry.id) !== itemId)
+    );
+
     renderMyListings();
   });
 
