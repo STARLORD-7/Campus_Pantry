@@ -204,13 +204,14 @@ function getItems() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY));
 
-    if (!Array.isArray(saved)) return initial;
+    // FIX: Use sample listings when browser storage is empty.
+    const source = Array.isArray(saved) ? saved : initial;
 
     const missing = initial.filter(seed =>
-      !saved.some(item => Number(item.id) === seed.id)
+      !source.some(item => Number(item.id) === seed.id)
     );
 
-    const merged = [...saved, ...missing].map(item => {
+    const merged = [...source, ...missing].map(item => {
       const isSample = initial.some(
         seed => Number(seed.id) === Number(item.id)
       );
@@ -233,29 +234,30 @@ function getItems() {
         owner: item.owner ||
           (isSample ? "Campus Pantry Student" : CURRENT_STUDENT),
 
-        // Keep the existing campus meeting point.
-        // Assign a random campus point only if one is missing.
+        // Keep existing campus meeting points.
         pickup: oldPickup
           ? randomChoice(meetingPoints)
           : item.pickup,
 
-        // Give old sample listings realistic demo dates and times.
+        // Generate dummy dates for old sample listings.
         meetupDate: oldDate
           ? randomDate()
           : item.meetupDate,
 
+        // Generate dummy times for old sample listings.
         meetupTime: oldTime
           ? randomChoice(meetingTimes)
           : item.meetupTime
       };
     });
 
-    // Save the generated details so they stay the same after refresh.
+    // Save generated details so they stay the same after refresh.
     saveItems(merged);
 
     return merged;
 
-  } catch {
+  } catch (error) {
+    console.error("Error loading listings:", error);
     return initial;
   }
 }
