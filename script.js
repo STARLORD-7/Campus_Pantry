@@ -19,7 +19,7 @@ const weekdays = [
   "Friday", "Saturday", "Sunday"
 ];
 
-// Profile menu
+// PROFILE MENU
 const profileToggle = document.getElementById("profile-toggle");
 const profileMenu = document.getElementById("profile-menu");
 
@@ -49,7 +49,7 @@ if (profileToggle && profileMenu) {
   });
 }
 
-// Demo listings
+// DEMO LISTINGS
 const initial = [
   { id: 1, name: "Notebook", category: "School supplies", condition: "Good condition", pickup: "Student Centre", available: true },
   { id: 2, name: "Pasta (unopened)", category: "Food", condition: "Unopened package", pickup: "Library entrance", available: true },
@@ -79,6 +79,7 @@ function randomAvailability() {
   };
 }
 
+// FORMAT TIME
 function formatTime(timeString) {
   if (!timeString) return "Not selected";
 
@@ -94,6 +95,7 @@ function formatTime(timeString) {
   return `${hour}:${minute} ${period}`;
 }
 
+// FORMAT AVAILABILITY
 function formatAvailability(days, times) {
   const dayText = Array.isArray(days) && days.length
     ? days.join(", ")
@@ -106,6 +108,7 @@ function formatAvailability(days, times) {
   return `${dayText} · ${timeText}`;
 }
 
+// ESCAPE USER TEXT
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({
     "&": "&amp;",
@@ -116,7 +119,7 @@ function esc(s) {
   }[c]));
 }
 
-// Save and load listings
+// SAVE LISTINGS
 function saveItems(items) {
   try {
     localStorage.setItem(KEY, JSON.stringify(items));
@@ -125,6 +128,7 @@ function saveItems(items) {
   }
 }
 
+// LOAD LISTINGS
 const DEMO_MEETUP_MIGRATION_KEY =
   "campusPantryOwnerAvailabilityMigration_v4";
 
@@ -172,9 +176,9 @@ function getItems() {
 
       return {
         ...item,
-        owner: item.owner || (isSample
-          ? "Campus Pantry Student"
-          : CURRENT_STUDENT),
+        owner: item.owner || (
+          isSample ? "Campus Pantry Student" : CURRENT_STUDENT
+        ),
         pickup: meetingPoints.includes(item.pickup)
           ? item.pickup
           : randomChoice(meetingPoints),
@@ -201,7 +205,7 @@ function getItems() {
   }
 }
 
-// Save and load requests
+// SAVE REQUESTS
 function getRequests() {
   try {
     const value = JSON.parse(localStorage.getItem(REQUESTS_KEY));
@@ -219,7 +223,7 @@ function saveRequests(requests) {
   }
 }
 
-// Browse Items page
+// BROWSE ITEMS PAGE
 const grid = document.getElementById("item-grid");
 
 if (grid) {
@@ -231,6 +235,7 @@ if (grid) {
   const modal = document.getElementById("modal");
   const requestFeedback = document.getElementById("request-feedback");
   const requestButton = document.getElementById("request-button");
+
   const payItForwardMessage =
     document.getElementById("pay-it-forward-message");
 
@@ -266,7 +271,7 @@ if (grid) {
     });
   }
 
-  // Open item details
+  // OPEN ITEM DETAILS
   grid.addEventListener("click", event => {
     const button = event.target.closest("button[data-id]");
     if (!button) return;
@@ -317,7 +322,7 @@ if (grid) {
     modal.hidden = false;
   });
 
-  // Submit an item request
+  // REQUEST ITEM
   requestButton.addEventListener("click", () => {
     const item = items.find(entry =>
       Number(entry.id) === Number(selected)
@@ -363,7 +368,6 @@ if (grid) {
     saveRequests(requests);
     render();
 
-    // Short confirmation message
     requestFeedback.textContent = "Request submitted successfully!";
 
     if (payItForwardMessage) {
@@ -374,6 +378,7 @@ if (grid) {
     requestButton.disabled = true;
   });
 
+  // CLOSE MODAL
   function closeModal() {
     modal.hidden = true;
   }
@@ -395,10 +400,14 @@ if (grid) {
   render();
 }
 
-// Give an Item page
+// GIVE AN ITEM PAGE WITH SUCCESS CONFIRMATION
 const form = document.getElementById("give-form");
 
 if (form) {
+  const successMessage = document.getElementById("listing-success");
+  const feedback = document.getElementById("give-feedback");
+  const listAnotherButton = document.getElementById("list-another");
+
   form.addEventListener("submit", event => {
     event.preventDefault();
 
@@ -422,36 +431,64 @@ if (form) {
     ].map(input => input.value);
 
     if (
-      !name || !category || !condition || !pickup ||
-      !availableDays.length || !availableTimes.length
+      !name ||
+      !category ||
+      !condition ||
+      !pickup ||
+      availableDays.length === 0 ||
+      availableTimes.length === 0
     ) {
-      document.getElementById("give-feedback").textContent =
-        "Please choose at least one available day and time.";
+      feedback.textContent =
+        "Please complete all fields and select available days and times.";
       return;
     }
 
-    items.unshift({
+    // CREATE NEW LISTING
+    const newItem = {
       id: Date.now(),
-      name,
-      category,
-      condition,
-      pickup,
+      name: name,
+      category: category,
+      condition: condition,
+      pickup: pickup,
       owner: CURRENT_STUDENT,
-      availableDays,
-      availableTimes,
+      availableDays: availableDays,
+      availableTimes: availableTimes,
       available: true,
       listingStatus: "Available"
-    });
+    };
 
+    // SAVE LISTING
+    items.unshift(newItem);
     saveItems(items);
+
+    // RESET FORM
     form.reset();
 
-    document.getElementById("give-feedback").textContent =
-      "Thanks! Your item has been added.";
+    // SHOW SUCCESS CONFIRMATION
+    form.hidden = true;
+    feedback.textContent = "";
+    successMessage.hidden = false;
+
+    successMessage.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  });
+
+  // LIST ANOTHER ITEM
+  listAnotherButton.addEventListener("click", () => {
+    successMessage.hidden = true;
+    form.hidden = false;
+    form.reset();
+
+    form.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   });
 }
 
-// My Requests page
+// MY REQUESTS PAGE
 const requestsList = document.getElementById("requests-list");
 
 if (requestsList) {
@@ -487,6 +524,7 @@ if (requestsList) {
     });
   }
 
+  // CANCEL REQUEST
   requestsList.addEventListener("click", event => {
     const button = event.target.closest("button[data-request-id]");
     if (!button) return;
@@ -523,7 +561,7 @@ if (requestsList) {
   renderRequests();
 }
 
-// My Listings page
+// MY LISTINGS PAGE
 const myListings = document.getElementById("my-listings");
 
 if (myListings) {
@@ -562,6 +600,7 @@ if (myListings) {
     });
   }
 
+  // CANCEL LISTING
   myListings.addEventListener("click", event => {
     const button = event.target.closest("button[data-item-id]");
     if (!button) return;
